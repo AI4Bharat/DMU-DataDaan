@@ -215,3 +215,19 @@ TypeError: 'NoneType' object does not support item assignment
 [2022-08-12 14:14:25,738] {ddsservice.py:30} Thread-1 INFO in ddsservice: 1600b421-8f26-46d1-a762-1d1db70e7db4 | Metadata file couldn't be parsed!
 [2022-08-12 14:14:25,743] {_internal.py:113} Thread-1 INFO in _internal: 127.0.0.1 - - [12/Aug/2022 14:14:25] "[31m[1mPOST /dmu-datastore/data-upload-service/v1/document/upload HTTP/1.1[0m" 400 -
 [2022-08-12 14:19:02,836] {_internal.py:113} MainThread INFO in _internal:  * Running on http://localhost:5001/ (Press CTRL+C to quit)
+[2022-08-12 15:09:55,463] {_internal.py:113} MainThread INFO in _internal:  * Running on http://localhost:5001/ (Press CTRL+C to quit)
+[2022-08-12 15:10:28,703] {_internal.py:113} MainThread INFO in _internal:  * Running on http://localhost:5001/ (Press CTRL+C to quit)
+[2022-08-12 15:10:34,703] {userservice.py:78} Thread-1 INFO in userservice: Session Expired
+[2022-08-12 15:10:34,703] {userservice.py:84} Thread-1 INFO in userservice: Logging out...
+[2022-08-12 15:10:34,709] {userservice.py:93} Thread-1 INFO in userservice: Logged out successfully!
+[2022-08-12 15:10:34,710] {_internal.py:113} Thread-1 INFO in _internal: 127.0.0.1 - - [12/Aug/2022 15:10:34] "[31m[1mPOST /dmu-datastore/data-upload-service/v1/document/upload HTTP/1.1[0m" 403 -
+[2022-08-12 15:10:42,191] {userservice.py:50} Thread-2 INFO in userservice: Logging in...
+[2022-08-12 15:10:42,466] {_internal.py:113} Thread-2 INFO in _internal: 127.0.0.1 - - [12/Aug/2022 15:10:42] "[37mPOST /dmu-datastore/data-upload-service/v1/login HTTP/1.1[0m" 200 -
+[2022-08-12 15:11:01,694] {ddsservice.py:27} Thread-3 INFO in ddsservice: 9e2776ac-0e20-436a-b386-0c502934ea7d | Uploading file...
+[2022-08-12 15:11:01,695] {ddsservice.py:46} Thread-3 INFO in ddsservice: 9e2776ac-0e20-436a-b386-0c502934ea7d | Parsing metadata file...
+[2022-08-12 15:11:02,171] {ddsservice.py:50} Thread-3 INFO in ddsservice: Metadata Filename: test-metadata - Sheet1.csv, MIME Type: text/csv
+[2022-08-12 15:11:02,172] {ddsservice.py:84} Thread-3 INFO in ddsservice: 9e2776ac-0e20-436a-b386-0c502934ea7d | Filename: UEMSMacAgent.zip, MIME Type: application/zip
+[2022-08-12 15:11:02,172] {ddsservice.py:95} Thread-3 INFO in ddsservice: 9e2776ac-0e20-436a-b386-0c502934ea7d | Saving to local store...
+[2022-08-12 15:11:02,208] {ddsservice.py:97} Thread-3 INFO in ddsservice: 9e2776ac-0e20-436a-b386-0c502934ea7d | Pushing to object store...
+[2022-08-12 15:11:02,247] {ddsservice.py:42} Thread-3 INFO in ddsservice: 9e2776ac-0e20-436a-b386-0c502934ea7d | File upload failed.
+[2022-08-12 15:11:02,250] {_internal.py:113} Thread-3 INFO in _internal: 127.0.0.1 - - [12/Aug/2022 15:11:02] "[31m[1mPOST /dmu-datastore/data-upload-service/v1/document/upload HTTP/1.1[0m" 400 -

@@ -26,9 +26,6 @@ pymongo==3.10.1
 python-dateutil==2.8.1
 PyYAML==5.3
 requests==2.23.0
-scikit-learn==0.22.2.post1
-scipy==1.4.1
-sentencepiece==0.1.85
 six==1.14.0
 tqdm==4.30.0
 transliterate==1.10.2
@@ -39,11 +36,9 @@ utils==1.0.1
 Werkzeug==1.0.0
 wrapt==1.11.2
 WTForms==2.2.1
-anuvaad-auditor==0.1.4
 flask-restful==0.3.8
+bcrypt==3.2.2
+uuid==1.30
+msrest==0.7.0
 azure-core==1.24.0
 azure-storage-blob==12.8.1
-bcrypt~=3.2.2
-azure~=4.0.0
-uuid~=1.30
-msrest==0.7.0
