@@ -47,3 +47,8 @@ class DDSRepo:
         col = self.get_dds_connection()
         deleted = col.delete_many(query)
         return deleted.deleted_count
+
+    def update_dds_metadata(self, find_query, set_clause):
+        col = self.get_dds_connection()
+        updated = col.update(find_query, {"$set": set_clause})
+        return updated

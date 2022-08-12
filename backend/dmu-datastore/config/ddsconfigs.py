@@ -12,7 +12,7 @@ session_timeout_in_ms = os.environ.get('DMU_DUS_SESSION_TIMEOUT_IN_MS', 1000000)
 if isinstance(session_timeout_in_ms, str):
     ds_batch_size = eval(session_timeout_in_ms)
 allowed_file_types = ["zip"]
-allowed_metadata_file_types = ["csv"]
+allowed_metadata_file_types = ["tsv"]
 local_storage_path = os.environ.get('DMU_DUS_LOCAL_STORAGE_PATH', "/Users/vishalmahuli/Desktop/dmu-dus/docs")
 azure_connection_string = os.environ.get('DMU_DUS_AZURE_CONNECTION_STRING', "connection_string")
 azure_container_name = os.environ.get('DMU_DUS_AZURE_FILE_CONTAINER', "container")

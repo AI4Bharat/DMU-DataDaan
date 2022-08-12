@@ -24,20 +24,24 @@ class DDSService:
 
     def upload(self, api_request, data):
         upload_id = str(uuid.uuid4())
-        log.info(f"{upload_id} | Uploading file...")
+        log.info(f"{upload_id} | Initiating...")
         metadata = self.parse_metadata_csv(api_request, upload_id)
         if not metadata:
             log.info(f"{upload_id} | Metadata file couldn't be parsed!")
             return {"status": "FAILED", "message": "Metadata file couldn't be parsed!"}
+        if not isinstance(metadata, tuple):
+            log.info(f"{upload_id} | Metadata file couldn't be parsed!")
+            return metadata
         data["fileMetadata"] = metadata[0]
         doc_path = self.upload_doc_to_azure(api_request, metadata[1], upload_id)
         if doc_path:
-            data["uploadId"], data["zipFilePath"], data["uploadedBy"] = upload_id, doc_path[0], data["metadata"]["userId"]
-            data["createdAt"], data["metadataFilePath"] = eval(str(time.time()).replace('.', '')[0:13]), doc_path[1]
-            data["lastUpdatedBy"], data["lastUpdatedAt"] = data["metadata"]["userId"], eval(str(time.time()).replace('.', '')[0:13])
-            log.info(f"{upload_id} | Saving metadata....")
+            data["uploadId"], data["mediaFilePath"], data["submitterId"] = upload_id, doc_path[0], data["metadata"]["userId"]
+            data["createdTimestamp"], data["metadataFilePath"] = eval(str(time.time()).replace('.', '')[0:13]), doc_path[1]
+            data["lastUpdatedBy"], data["lastUpdatedTimestamp"] = data["metadata"]["userId"], eval(str(time.time()).replace('.', '')[0:13])
+            data["uploadStatus"] = "InProgress"
+            log.info(f"{upload_id} | Saving metadata to mongo store....")
             dds_repo.insert_dds_metadata([data])
-            return {"status": "Success", "message": "File Upload Successful!", "uploadId": upload_id}
+            return {"status": "Success", "message": "Your file is being uploaded, use 'uploadId' to track the status!", "uploadId": upload_id}
         else:
             log.info(f"{upload_id} | File upload failed.")
             return {"status": "FAILED", "message": "File Upload Failed!"}
@@ -47,7 +51,6 @@ class DDSService:
         try:
             file = api_request.files['metadata']
             mime_type, filename = file.mimetype, str(file.filename)
-            log.info(f'Metadata Filename: {filename}, MIME Type: {str(mime_type)}')
             file_real_name, file_extension = os.path.splitext(filename)
             file_allowed = False
             for allowed_file_extension in allowed_metadata_file_types:
@@ -61,7 +64,7 @@ class DDSService:
             file.save(filepath)
             result = {}
             with open(filepath, 'r') as f:
-                red = csv.DictReader(f)
+                red = csv.DictReader(f, delimiter="\t")
                 for d in red:
                     result.setdefault(d['Field'], d['Value'])
             return result, filepath
@@ -72,9 +75,9 @@ class DDSService:
     def upload_doc_to_azure(self, api_request, metadata_filepath, upload_id):
         # validations
         try:
+            log.info(f"{upload_id} | Processing Zip File......")
             file = api_request.files['zipFile']
             mime_type, filename = file.mimetype, str(file.filename)
-            log.info(f"{upload_id} | Filename: {filename}, MIME Type: {str(mime_type)}")
             file_real_name, file_extension = os.path.splitext(filename)
             local_filename = f'{upload_id}___{filename}'
             filepath = os.path.join(local_storage_path, local_filename)
@@ -87,9 +90,10 @@ class DDSService:
                 return {"status": "FAILED", "message": "Unsupported File Type!"}
             log.info(f"{upload_id} | Saving to local store...")
             file.save(filepath)
-            log.info(f"{upload_id} | Pushing to object store...")
+            log.info(f"{upload_id} | Uploading to blob store...")
             uploaded_path = dds_utils.upload_file_to_azure_blob(filepath, filename, upload_id)
-            uploaded_metadata_path = dds_utils.upload_file_to_azure_blob(metadata_filepath, "metadata.csv", upload_id)
+            metadata_filename = metadata_filepath.split("___")[2]
+            uploaded_metadata_path = dds_utils.upload_file_to_azure_blob(metadata_filepath, metadata_filename, upload_id)
             return uploaded_path, uploaded_metadata_path
         except Exception as e:
             log.exception(f"Exception while uploading to azure: {e}", e)
@@ -97,7 +101,7 @@ class DDSService:
 
     def search_uploads(self, data):
         log.info("Searching for User Uploads......")
-        query = {"uploadedBy": data["metadata"]["userId"]}
+        query = {"submitterId": data["metadata"]["userId"]}
         if 'uploadId' in data.keys():
             query["uploadId"] = data["uploadId"]
         result = dds_repo.search_dds(query, {"_id": False}, None, None)
