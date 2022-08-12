@@ -1,10 +1,9 @@
-# ANUVAAD DATAFLOW PIPELINE WORKFLOW MANAGER
+# DMU Data Upload System
 
-Workflow Manager is the orchestrator for the entire dataflow pipeline.
+Data Upload Service to facilitate uploading of structured & unstructured datasets belonging to text, audio, image etc.
 
 ## Prerequisites
-- python 3.7
-- ubuntu 16.04
+- python 3.8
 
 Dependencies:
 ```bash
@@ -14,20 +13,3 @@ Run:
 ```bash
 python app.py
 ```
-
-## APIs and Documentation
-Details of the APIs can be found here:
-https://raw.githubusercontent.com/project-anuvaad/anuvaad/wfmanager_feature/anuvaad-etl/anuvaad-workflow-mgr/docs/etl-wf-manager-api-contract.yml
-
-Details of the requests flowing in and out through kafka can be found here:
-https://raw.githubusercontent.com/project-anuvaad/anuvaad/wfmanager_feature/anuvaad-etl/anuvaad-workflow-mgr/docs/etl-wf-manager-kafka-contract.yml
-
-## Configs
-Wokflows have to be configured in a .yaml file as shown in the following document:
-https://raw.githubusercontent.com/project-anuvaad/anuvaad/wfmanager_feature/anuvaad-etl/anuvaad-workflow-mgr/config/etl-wf-manager-config.yml
-
-## Postman Collection
-Inorder to play around with the APIs and some hands on, Use this collecion on Postman: https://www.getpostman.com/collections/11b7d2bc4e5aa37d04c8
-
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
