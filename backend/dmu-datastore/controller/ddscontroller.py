@@ -11,7 +11,7 @@ dds_app = Flask(__name__)
 log = logging.getLogger('file')
 
 
-# REST endpoint to fetch configs
+# REST endpoint for login
 @dds_app.route(context_path + '/v1/login', methods=["POST"])
 def login():
     user_service = UserService()
@@ -28,7 +28,7 @@ def login():
         return {"status": "FAILED", "message": "Something went wrong"}, 400
 
 
-# REST endpoint to fetch configs
+# REST endpoint for logout
 @dds_app.route(context_path + '/v1/logout', methods=["GET"])
 def logout():
     user_service = UserService()
@@ -46,7 +46,7 @@ def logout():
         return {"status": "FAILED", "message": "Something went wrong"}, 400
 
 
-# REST endpoint to fetch configs
+# REST endpoint for signup - protected access.
 @dds_app.route(context_path + '/v1/signup', methods=["POST"])
 def signup():
     user_service = UserService()
@@ -60,7 +60,7 @@ def signup():
         return {"status": "FAILED", "message": "Something went wrong"}, 400
 
 
-# REST endpoint to fetch configs
+# REST endpoint for delete users - protected access.
 @dds_app.route(context_path + '/v1/users/delete', methods=["POST"])
 def delete_users():
     user_service = UserService()
@@ -77,8 +77,8 @@ def delete_users():
         return {"status": "FAILED", "message": "Something went wrong"}, 400
 
 
-# REST endpoint to fetch configs
-@dds_app.route(context_path + '/v1/document/upload', methods=["POST"])
+# REST endpoint for file upload (zip file)
+@dds_app.route(context_path + '/v1/file/upload', methods=["POST"])
 def doc_upload():
     dds_service, user_service = DDSService(), UserService()
     data = request.get_json()
@@ -96,8 +96,8 @@ def doc_upload():
         return {"status": "FAILED", "message": "Something went wrong"}, 400
 
 
-# REST endpoint to fetch configs
-@dds_app.route(context_path + '/v1/document/search', methods=["POST"])
+# REST endpoint to search user uploads
+@dds_app.route(context_path + '/v1/upload/search', methods=["POST"])
 def doc_search():
     dds_service, user_service = DDSService(), UserService()
     data = request.get_json()
@@ -111,12 +111,6 @@ def doc_search():
     except Exception as e:
         log.exception("Something went wrong: " + str(e), e)
         return {"status": "FAILED", "message": "Something went wrong"}, 400
-
-
-# REST endpoint to fetch configs
-@dds_app.route(context_path + '/v1/document/download', methods=["POST"])
-def doc_download():
-    return jsonify({"status": "OK"}), 200
 
 
 # Fetches required headers from the request and adds it to the body.
