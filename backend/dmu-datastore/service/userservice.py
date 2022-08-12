@@ -68,9 +68,10 @@ class UserService:
             return None
 
     def is_session_active(self, token):
+        log.info("Checking if the user session is active.....")
         session_details = user_repo.session_search({"token": token})
         if not session_details:
-            log.info(f'Session Expired')
+            log.info(f'Invalid Token!')
             return False
         session_details = session_details[0]
         diff = eval(str(time.time()).replace('.', '')[0:13]) - session_details["createdAt"]
@@ -86,7 +87,7 @@ class UserService:
             session_details = user_repo.session_search({"token": token})
             if not session_details:
                 log.info(f'Logged out already!')
-                return {"status": "Success", "message": "logged out!"}
+                return {"status": "Success", "message": "Logged out already!"}
             session_details = session_details[0]
             logged_out = user_repo.logout({"userId": session_details["userId"]})
             if logged_out > 0:

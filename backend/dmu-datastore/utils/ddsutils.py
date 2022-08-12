@@ -31,9 +31,13 @@ class DDSUtils:
         blob_file_name = folder + "/" + file_name
         blob_service_client = BlobServiceClient.from_connection_string(azure_connection_string)
         blob_client = blob_service_client.get_blob_client(container=azure_container_name, blob=blob_file_name)
+        '''
         log.info(f'Pushing {file_path} to azure at {blob_file_name} on a new fork......')
         persister = threading.Thread(target=self.upload_file, args=(blob_client, file_path))
         persister.start()
+        '''
+        log.info(f'Pushing {file_path} to azure at {blob_file_name} synchronously....')
+        self.upload_file(blob_client, file_path)
         return f'{azure_link_prefix}{blob_file_name}'
 
     def upload_file(self, blob_client, file_path):

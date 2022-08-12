@@ -39,6 +39,7 @@ class DDSRepo:
             res = col.find(query, exclude).sort([('_id', -1)]).skip(offset).limit(res_limit)
         result = []
         for record in res:
+            del record["metadata"]
             result.append(record)
         return result
 

@@ -29,15 +29,18 @@ def login():
 
 
 # REST endpoint to fetch configs
-@dds_app.route(context_path + '/v1/logout', methods=["POST"])
+@dds_app.route(context_path + '/v1/logout', methods=["GET"])
 def logout():
     user_service = UserService()
-    data = request.get_json()
+    data = add_headers({}, request)
     try:
-        response = user_service.logout(data)
-        if not response:
-            return {"status": "FAILED", "message": "Something went wrong"}, 400
-        return jsonify(response), 200
+        if user_service.is_session_active(data["metadata"]["token"]):
+            response = user_service.logout(data["metadata"]["token"])
+            if not response:
+                return {"status": "FAILED", "message": "Something went wrong"}, 400
+            return jsonify(response), 200
+        response = {"status": "Invalid Access", "message": "You're not authorised to access this resource"}
+        return jsonify(response), 403
     except Exception as e:
         log.exception("Something went wrong: " + str(e), e)
         return {"status": "FAILED", "message": "Something went wrong"}, 400
