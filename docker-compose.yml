@@ -1,0 +1,59 @@
+version: "3.7"
+
+services:
+
+    client:
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile
+        ports:
+            - "80:80"
+        volumes: 
+            - ./frontend:/app
+            - /app/node_modules
+        networks:
+            - frontend
+
+    mongodb:
+        image: mongo
+        container_name: mongo
+        restart: unless-stopped
+        command: mongod --auth
+        env_file:
+            - ./.env.prod
+        environment:
+            MONGODB_DATA_DIR: /data/db
+        ports:
+            - "27017:27017"
+        volumes:
+            - mongodbdata:/data/db
+        networks:
+            - backend
+
+    api:
+        build: 
+            context: ./backend
+            dockerfile: Dockerfile
+        command: gunicorn --bind 0.0.0.0:5000 app:dds_app --timeout 600 --workers 4 --access-logfile '-' --error-logfile '-'
+        expose:
+            - 5000
+        env_file:
+            - ./.env.prod
+        volumes:
+            - appdata:/var/www/
+        depends_on: 
+            - mongodb
+        networks:
+            - frontend
+            - backend
+
+networks:
+    frontend:
+        driver: bridge
+    backend:
+        driver: bridge
+volumes:
+    mongodbdata:
+        driver: local
+    appdata:
+        driver: local
