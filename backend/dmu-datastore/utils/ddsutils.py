@@ -46,41 +46,30 @@ class DDSUtils:
             return f'{azure_link_prefix}{blob_file_name}'
         except Exception as e:
             log.exception(f'Exception while getting Blob Client to azure blob storage: {e}', e)
-            self.update_upload_status(folder, file_path, True, False)
+            self.update_upload_status(folder, file_path, True)
             return None
 
     def upload_file(self, blob_client, file_path, upload_id):
         try:
             with open(file_path, "rb") as data:
                 blob_client.upload_blob(data, overwrite=True)
-            self.update_upload_status(upload_id, file_path, False, True)
+            self.update_upload_status(upload_id, file_path, False)
         except Exception as e:
             log.exception(f'Exception while pushing to azure blob storage: {e}', e)
-            self.update_upload_status(upload_id, file_path, True, True)
+            self.update_upload_status(upload_id, file_path, True)
 
     def camel_case(self, str):
         s = sub(r"(_|-)+", " ", str).title().replace(" ", "")
         return ''.join([s[0].lower(), s[1:]])
 
-    def update_upload_status(self, upload_id, file_path, upload_failed, after_acceptance):
+    def update_upload_status(self, upload_id, file_path, upload_failed):
         log.info(f"{upload_id} | Updating Upload status for: {file_path}")
         if upload_failed:
-            if after_acceptance:
-                if '___metadata___' in file_path:
-                    update_query = {"uploadStatus": "Failed",
-                                    "lastUpdatedTimestamp": eval(str(time.time()).replace('.', '')[0:13]),
-                                    "metadata_local": file_path}
-                else:
-                    update_query = {"uploadStatus": "Failed",
-                                    "lastUpdatedTimestamp": eval(str(time.time()).replace('.', '')[0:13]),
-                                    "media_local": file_path}
-            else:
-                update_query = {"uploadStatus": "Failed",
-                                "lastUpdatedTimestamp": eval(str(time.time()).replace('.', '')[0:13])}
+            update_query = {"uploadStatus": "Failed",
+                            "lastUpdatedTimestamp": eval(str(time.time()).replace('.', '')[0:13])}
             dds_repo.update_dds_metadata({"uploadId": upload_id}, update_query)
         else:
             dds_repo.update_dds_metadata({"uploadId": upload_id}, {"uploadStatus": "Completed",
                                                                    "lastUpdatedTimestamp": eval(
                                                                        str(time.time()).replace('.', '')[0:13])})
-            #dds_repo.update_dds_metadata({"uploadId": upload_id}, {"$unset": {"metadata_local": 1, "media_local": 1}})
             os.remove(file_path)

@@ -40,6 +40,8 @@ class DDSRepo:
         result = []
         for record in res:
             del record["metadata"]
+            del record["media_local"]
+            del record["metadata_local"]
             result.append(record)
         return result
 

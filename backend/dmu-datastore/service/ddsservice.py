@@ -39,9 +39,10 @@ class DDSService:
             if not isinstance(doc_path, tuple):
                 return doc_path
             data["uploadId"], data["mediaFilePath"], data["submitterId"] = upload_id, doc_path[0], data["metadata"]["userId"]
-            data["createdTimestamp"], data["metadataFilePath"] = eval(str(time.time()).replace('.', '')[0:13]), doc_path[1]
+            data["createdTimestamp"], data["metadataFilePath"] = eval(str(time.time()).replace('.', '')[0:13]), doc_path[2]
             data["lastUpdatedBy"], data["lastUpdatedTimestamp"] = data["metadata"]["userId"], eval(str(time.time()).replace('.', '')[0:13])
             data["uploadStatus"], data["active"] = "InProgress", True
+            data["metadata_local"], data["media_local"] = doc_path[3], doc_path[1]
             log.info(f"{upload_id} | Saving metadata to mongo store....")
             dds_repo.insert_dds_metadata([data])
             return {"status": "Success", "message": "Your files are being uploaded, use 'uploadId' to track the status!", "uploadId": upload_id}
@@ -112,7 +113,7 @@ class DDSService:
                 metadata_filename = metadata_filepath.split("___")[2]
                 uploaded_metadata_path = dds_utils.upload_file_to_azure_blob(metadata_filepath, metadata_filename, upload_id)
                 if uploaded_metadata_path:
-                    return uploaded_path, uploaded_metadata_path
+                    return [uploaded_path, filepath, uploaded_metadata_path, metadata_filepath]
             os.remove(filepath)
             os.remove(metadata_filepath)
             return {"status": "FAILED", "message": "File Upload failed due to an internal error!"}
