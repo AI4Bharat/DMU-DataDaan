@@ -11,6 +11,13 @@ dds_app = Flask(__name__)
 log = logging.getLogger('file')
 
 
+@dds_app.route('/ping')
+def index():
+    return jsonify(
+        status=True,
+        message='Welcome to the DMU Backend Server!'
+    )
+
 # REST endpoint for login
 @dds_app.route(context_path + '/v1/login', methods=["POST"])
 def login():
