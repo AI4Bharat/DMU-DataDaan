@@ -69,7 +69,9 @@ class DDSUtils:
                             "lastUpdatedTimestamp": eval(str(time.time()).replace('.', '')[0:13])}
             dds_repo.update_dds_metadata({"uploadId": upload_id}, update_query)
         else:
-            dds_repo.update_dds_metadata({"uploadId": upload_id}, {"uploadStatus": "Completed",
-                                                                   "lastUpdatedTimestamp": eval(
-                                                                       str(time.time()).replace('.', '')[0:13])})
+            if "___metadata___" in file_path:
+                query = {"lastUpdatedTimestamp": eval(str(time.time()).replace('.', '')[0:13])}
+            else:
+                query = {"uploadStatus": "Completed", "lastUpdatedTimestamp": eval(str(time.time()).replace('.', '')[0:13])}
+            dds_repo.update_dds_metadata({"uploadId": upload_id}, query)
             os.remove(file_path)

@@ -36,7 +36,7 @@ class DDSService:
         data["fileMetadata"], meta_filepath = metadata[0], metadata[1]
         doc_path = self.upload_doc_to_azure(api_request, metadata[1], upload_id)
         if doc_path:
-            if not isinstance(doc_path, tuple):
+            if not isinstance(doc_path, list):
                 return doc_path
             data["uploadId"], data["mediaFilePath"], data["submitterId"] = upload_id, doc_path[0], data["metadata"]["userId"]
             data["createdTimestamp"], data["metadataFilePath"] = eval(str(time.time()).replace('.', '')[0:13]), doc_path[2]

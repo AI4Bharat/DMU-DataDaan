@@ -12,16 +12,14 @@ class DDSValidator:
 
     def validate_upload_req(self, api_request):
         try:
-            log.info("Validating the request.........")
             if dds_service.is_system_busy():
                 return {"status": "FAILED", "message": "The System is currently busy, please try after sometime."}
+            log.info("Validating the request.........")
             files = api_request.files
-            log.info("files read")
             if 'metadata' not in files.keys():
                 return {"status": "VALIDATION_FAILED", "message": "metadata is mandatory!"}
             if 'zipFile' not in files.keys():
                 return {"status": "VALIDATION_FAILED", "message": "zipFile is mandatory!"}
-            log.info("checks over")
             return None
         except Exception as e:
             log.exception(f"Exception in upload validation: {e}", e)

@@ -36,7 +36,7 @@ def login():
 @dds_app.route(context_path + '/v1/logout', methods=["GET"])
 def logout():
     user_service = UserService()
-    data = add_headers({}, request)
+    data = add_headers({}, request, "userId")
     try:
         if user_service.is_session_active(data["metadata"]["token"]):
             response = user_service.logout(data["metadata"]["token"])
@@ -55,7 +55,7 @@ def logout():
 def signup():
     user_service = UserService()
     data = request.get_json()
-    data = add_headers(data, request)
+    data = add_headers(data, request, "userId")
     try:
         response = user_service.signup(data)
         return jsonify(response), 200
@@ -69,9 +69,11 @@ def signup():
 def delete_users():
     user_service = UserService()
     data = request.get_json()
-    data = add_headers(data, request)
+    data = add_headers(data, request, "userId")
     try:
-        if user_service.is_session_active(data["metadata"]["token"]):
+        user_id = user_service.is_session_active(data["metadata"]["token"])
+        if user_id:
+            data = add_headers(data, request, user_id)
             response = user_service.delete_user(data)
             return jsonify(response), 200
         response = {"status": "Invalid Access", "message": "You're not authorised to access this resource"}
@@ -86,9 +88,11 @@ def delete_users():
 def doc_upload():
     dds_service, user_service, validator = DDSService(), UserService(), DDSValidator()
     data = request.get_json()
-    data = add_headers(data, request)
+    data = add_headers(data, request, "userId")
     try:
-        if user_service.is_session_active(data["metadata"]["token"]):
+        user_id = user_service.is_session_active(data["metadata"]["token"])
+        if user_id:
+            data = add_headers(data, request, user_id)
             validation_res = validator.validate_upload_req(request)
             if validation_res:
                 return jsonify(validation_res), 400
@@ -108,9 +112,11 @@ def doc_upload():
 def doc_search():
     dds_service, user_service = DDSService(), UserService()
     data = request.get_json()
-    data = add_headers(data, request)
+    data = add_headers(data, request, "userId")
     try:
-        if user_service.is_session_active(data["metadata"]["token"]):
+        user_id = user_service.is_session_active(data["metadata"]["token"])
+        if user_id:
+            data = add_headers(data, request, user_id)
             response = dds_service.search_uploads(data)
             return jsonify(response), 200
         response = {"status": "Invalid Access", "message": "You're not authorised to access this resource"}
@@ -125,9 +131,11 @@ def doc_search():
 def doc_delete():
     dds_service, user_service, validator = DDSService(), UserService(), DDSValidator()
     data = request.get_json()
-    data = add_headers(data, request)
+    data = add_headers(data, request, "userId")
     try:
-        if user_service.is_session_active(data["metadata"]["token"]):
+        user_id = user_service.is_session_active(data["metadata"]["token"])
+        if user_id:
+            data = add_headers(data, request, user_id)
             validation_res = validator.validate_delete_req(request)
             if validation_res:
                 return jsonify(validation_res), 400
@@ -141,11 +149,11 @@ def doc_delete():
 
 
 # Fetches required headers from the request and adds it to the body.
-def add_headers(data, api_request):
+def add_headers(data, api_request, user_id):
     if not data:
         data = {}
     headers = {
-        "userId": api_request.headers["x-user-id"],
+        "userId": user_id,
         "receivedAt": eval(str(time.time()).replace('.', '')[0:13]),
     }
     api_headers = dict(api_request.headers)

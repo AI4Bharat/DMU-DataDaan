@@ -76,7 +76,7 @@ class UserService:
             log.info(f'Session Expired')
             self.logout(token)
             return False
-        return True
+        return session_details["userId"]
 
     def logout(self, token):
         log.info("Logging out...")
