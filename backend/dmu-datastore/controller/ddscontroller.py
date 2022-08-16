@@ -88,10 +88,10 @@ def doc_upload():
     data = request.get_json()
     data = add_headers(data, request)
     try:
-        validation_res = validator.validate_upload_req(request)
-        if validation_res:
-            return jsonify(validation_res), 400
         if user_service.is_session_active(data["metadata"]["token"]):
+            validation_res = validator.validate_upload_req(request)
+            if validation_res:
+                return jsonify(validation_res), 400
             response = dds_service.upload(request, data)
             if "uploadId" in response.keys():
                 return jsonify(response), 200
@@ -112,6 +112,26 @@ def doc_search():
     try:
         if user_service.is_session_active(data["metadata"]["token"]):
             response = dds_service.search_uploads(data)
+            return jsonify(response), 200
+        response = {"status": "Invalid Access", "message": "You're not authorised to access this resource"}
+        return jsonify(response), 403
+    except Exception as e:
+        log.exception("Something went wrong: " + str(e), e)
+        return {"status": "FAILED", "message": "Something went wrong"}, 400
+
+
+# REST endpoint to search user uploads
+@dds_app.route(context_path + '/v1/upload/delete', methods=["POST"])
+def doc_delete():
+    dds_service, user_service, validator = DDSService(), UserService(), DDSValidator()
+    data = request.get_json()
+    data = add_headers(data, request)
+    try:
+        if user_service.is_session_active(data["metadata"]["token"]):
+            validation_res = validator.validate_delete_req(request)
+            if validation_res:
+                return jsonify(validation_res), 400
+            response = dds_service.delete_uploads(data)
             return jsonify(response), 200
         response = {"status": "Invalid Access", "message": "You're not authorised to access this resource"}
         return jsonify(response), 403
