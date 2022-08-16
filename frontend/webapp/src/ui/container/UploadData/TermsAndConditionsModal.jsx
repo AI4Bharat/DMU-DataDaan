@@ -24,7 +24,7 @@ const TermsAndConditionModal = ({ open, handleClose, ...props }) => {
       open={open}
       handleClose={handleClose}
     >
-      <Card>
+      <Card className={classes.card}>
         <CardHeader
           title={
             <span>
@@ -63,14 +63,14 @@ const TermsAndConditionModal = ({ open, handleClose, ...props }) => {
               md={10}
               lg={10}
               xl={10}
-              style={{ display: "flex", justifyContent: "flex-end" }}
+              className={classes.flexEnd}
             >
-              <Button onClick={handleCancel} color="primnary">
+              <Button onClick={handleCancel} color="primnary" size="large">
                 CANCEL
               </Button>
             </Grid>
-            <Grid item style={{ display: "flex", justifyContent: "flex-end" }}>
-              <Button disabled={!isChecked} onClick={handleAgree} color="primary">
+            <Grid item xs={2} sm={2} md={2} lg={2} xl={2} className={classes.flexEnd} >
+              <Button disabled={!isChecked} onClick={handleAgree} color="primary" variant="contained" size="large">
                 I AGREE
               </Button>
             </Grid>

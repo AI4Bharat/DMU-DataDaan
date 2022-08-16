@@ -78,12 +78,12 @@ const UploadData = (props) => {
           xl={6}
           className={classes.flexEnd}
         >
-          <Button size="large" color="primary" variant="outlined">
+          <Button size="large" color="primary" variant="contained">
             Clear
           </Button>
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-          <Button size="large" color="primary" variant="outlined">
+          <Button size="large" color="primary" variant="contained">
             Submit
           </Button>
         </Grid>

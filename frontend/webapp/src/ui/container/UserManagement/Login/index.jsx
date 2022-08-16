@@ -32,17 +32,14 @@ const Login = (props) => {
 
   const [snackbar, setSnackbarInfo] = useState({
     open: false,
-    message: '',
-    variant: 'success'
-  })
-
+    message: "",
+    variant: "success",
+  });
 
   useEffect(() => {
-    localStorage.removeItem('userInfo')
-    localStorage.removeItem('userDetails')
+    localStorage.removeItem("userInfo");
+    localStorage.removeItem("userDetails");
   }, []);
-
-
 
   const history = useHistory();
   const [loading, setLoading] = useState(false);
@@ -59,21 +56,19 @@ const Login = (props) => {
     event.preventDefault();
   };
 
-  const handleSubmit = async () => {
-
-  }
+  const handleSubmit = async () => {};
 
   const HandleSubmitCheck = () => {
     if (!values.email.trim() || !values.password.trim()) {
-
-      setError({ ...error, email: !values.email.trim() ? true : false, password: !values.password.trim() ? true : false });
-    }
-
-    else {
+      setError({
+        ...error,
+        email: !values.email.trim() ? true : false,
+        password: !values.password.trim() ? true : false,
+      });
+    } else {
       handleSubmit();
-      setLoading(true)
+      setLoading(true);
     }
-
   };
   const { classes } = props;
 
@@ -86,7 +81,7 @@ const Login = (props) => {
             className={classes.textField}
             required
             onChange={handleChange("email")}
-            onKeyPress={(e) => e.key === 'Enter' && HandleSubmitCheck()}
+            onKeyPress={(e) => e.key === "Enter" && HandleSubmitCheck()}
             id="outlined-required"
             value={values.email}
             error={error.email}
@@ -95,7 +90,12 @@ const Login = (props) => {
             variant="outlined"
           />
           <FormControl className={classes.fullWidth} variant="outlined">
-            <InputLabel error={error.password} htmlFor="outlined-adornment-password">Password * </InputLabel>
+            <InputLabel
+              error={error.password}
+              htmlFor="outlined-adornment-password"
+            >
+              Password *{" "}
+            </InputLabel>
 
             <OutlinedInput
               id="outlined-adornment-password"
@@ -105,7 +105,7 @@ const Login = (props) => {
               error={error.password}
               helperText={error.password ? "Enter a password" : ""}
               onChange={handleChange("password")}
-              onKeyPress={(e) => e.key === 'Enter' && HandleSubmitCheck()}
+              onKeyPress={(e) => e.key === "Enter" && HandleSubmitCheck()}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -120,7 +120,9 @@ const Login = (props) => {
               }
               labelWidth={100}
             />
-            {error.password && <FormHelperText error={true}>Incorrect password</FormHelperText>}
+            {error.password && (
+              <FormHelperText error={true}>Incorrect password</FormHelperText>
+            )}
           </FormControl>
           {/* <div className={classes.forgotPassword}>
             <Typography className={classes.forgoLink}>
@@ -139,11 +141,17 @@ const Login = (props) => {
           <Button
             color="primary"
             size="large"
-            variant="contained" aria-label="edit" className={classes.fullWidth} onClick={() => {
+            variant="contained"
+            aria-label="edit"
+            className={classes.fullWidth}
+            onClick={() => {
               HandleSubmitCheck();
             }}
-            disabled={loading}>
-            {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+            disabled={loading}
+          >
+            {loading && (
+              <CircularProgress size={24} className={classes.buttonProgress} />
+            )}
             Sign In
           </Button>
         </form>
@@ -157,7 +165,6 @@ const Login = (props) => {
             </Link>
           </Typography>
         </div> */}
-
       </Grid>
     </>
   );

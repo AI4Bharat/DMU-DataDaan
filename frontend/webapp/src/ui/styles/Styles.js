@@ -3,6 +3,10 @@ const GlobalStyles = (theme) => ({
     fontFamily: theme.typography.fontFamily,
   },
 
+  card:{
+    padding:theme.spacing(2)
+  },
+
   flexCenter: {
     display: "flex",
     flexDirection:'column',

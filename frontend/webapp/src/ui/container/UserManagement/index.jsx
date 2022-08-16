@@ -11,7 +11,7 @@ const UserManagement = (props) => {
   const param = useParams();
   const renderPage = () => {
     switch (param && param.page) {
-     case "user-login":
+      case "user-login":
         return <Login location={props.location} />;
       default:
         return <Login />;
