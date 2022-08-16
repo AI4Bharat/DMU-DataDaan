@@ -3,7 +3,7 @@ const aunthenticate = () => {
     if (userInfo && userInfo.privateKey ) {
         return true;
     }
-    return false;
+    return true;
 }
 
 export default aunthenticate;

@@ -41,13 +41,21 @@ import {
   };
   
   export default function App() {
-    console.log('App')
     return (
       <Router history={history} basename="/">
         <Switch>
           <Route exact path="/" component={Login}/>
           <Route exact path={`${process.env.PUBLIC_URL}/datadaan/user-login`} component={Login} />
-          {/* <PrivateRoute  */}
+          <PrivateRoute
+          path={`${process.env.PUBLIC_URL}/datadaan/upload-data`}
+          title={"Upload Data"}
+          authenticate={authenticateUser}
+          component={UploadData}
+          currentMenu="upload-data"
+          dontShowHeader={false}
+          type={"dataset"}
+          index={0}
+        />
         </Switch>
       </Router>
     );

@@ -1,10 +1,19 @@
-
 const GlobalStyles = (theme) => ({
   container: {
-    maxWidth: "1272px",
-    width: "100%",
-    margin: "2rem auto",
     fontFamily: theme.typography.fontFamily,
+  },
+
+  flexCenter: {
+    display: "flex",
+    flexDirection:'column',
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  flexEnd: {
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "center",
   },
 
   headerContainer: {
@@ -47,7 +56,7 @@ const GlobalStyles = (theme) => ({
     height: "64px",
     backgroundColor: "white",
     maxWidth: "350px",
-    minWidth:'350px',
+    minWidth: "350px",
     width: "auto",
     display: "flex",
     alignItems: "center",
@@ -60,8 +69,14 @@ const GlobalStyles = (theme) => ({
   },
 
   contributionTextBoxInput: {
-    fontSize: "14px"
-  }
+    fontSize: "14px",
+  },
+
+  iconbutton: {
+    position: "absolute",
+    right: "15px",
+    top: "5px",
+  },
 });
 
 export default GlobalStyles;

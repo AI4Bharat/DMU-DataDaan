@@ -6,6 +6,29 @@ const themeDefault = createMuiTheme({
     fontWeight: "400",
   },
   overrides: {
+    MuiDropzoneArea: {
+      root: {
+        display:'flex',
+        justifyContent:'center',
+        alignItems:'center',
+        top: "auto",
+        width: "50%",
+        borderColor: "#1C9AB7",
+        backgroundColor: "#F5F9FA",
+        border: "1px dashed #1C9AB7",
+        fontColor: "#1C9AB7",
+        marginTop: "3%",
+        marginLeft: "1%",
+        "& svg": { color: "#1C9AB7" },
+        "& p": {
+          textOverflow: "ellipsis",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          fontSize: "19px",
+          color: "#1C9AB7",
+        },
+      },
+    },
     MuiTableRow: {
       root: {
         height: "60px",
@@ -35,10 +58,10 @@ const themeDefault = createMuiTheme({
         minWidth: "210px",
       },
     },
-    MuiMenuItem:{
+    MuiMenuItem: {
       root: {
         "@media (max-width:670px)": {
-          fontSize: '0.875rem'
+          fontSize: "0.875rem",
         },
       },
     },
@@ -56,12 +79,12 @@ const themeDefault = createMuiTheme({
       root: {
         fontFamily: '"Roboto" ,sans-serif',
       },
-      padding:{
+      padding: {
         "@media (max-width:670px)": {
           padding: "0px",
-          paddingLeft:'9px',
+          paddingLeft: "9px",
         },
-      }
+      },
     },
     MUIDataTable: {
       paper: {
@@ -164,8 +187,8 @@ const themeDefault = createMuiTheme({
         fontSize: "16px",
         letterSpacing: "0.16px",
         textAlign: "center",
-        display:'flex',
-        justifyContent:'center',
+        display: "flex",
+        justifyContent: "center",
         height: "19px",
         "@media (max-width:640px)": {
           fontSize: "10px",
@@ -187,8 +210,6 @@ const themeDefault = createMuiTheme({
     MuiTabs: {
       indicator: {
         backgroundColor: "#FD7F23",
-      
-       
       },
     },
     MuiTab: {
