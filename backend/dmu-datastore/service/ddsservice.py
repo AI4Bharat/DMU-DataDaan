@@ -8,7 +8,7 @@ from flask_restful import reqparse
 from utils.ddsutils import DDSUtils
 from repository.userrepo import UserRepo
 from repository.ddsrepo import DDSRepo
-from config.ddsconfigs import allowed_file_types, local_storage_path, allowed_metadata_file_types
+from config.ddsconfigs import allowed_file_types, local_storage_path, allowed_metadata_file_types, max_no_of_processes
 
 dds_utils = DDSUtils()
 user_repo = UserRepo()
@@ -24,6 +24,8 @@ class DDSService:
 
     def upload(self, api_request, data):
         upload_id = str(uuid.uuid4())
+        if self.is_system_busy(upload_id):
+            return {"status": "FAILED", "message": "The System is currently busy, please try after sometime."}
         log.info(f"{upload_id} | Initiating...")
         metadata = self.parse_metadata_csv(api_request, upload_id)
         if not metadata:
@@ -73,7 +75,6 @@ class DDSService:
             return None
 
     def upload_doc_to_azure(self, api_request, metadata_filepath, upload_id):
-        # validations
         try:
             log.info(f"{upload_id} | Processing Zip File......")
             file = api_request.files['zipFile']
@@ -98,6 +99,15 @@ class DDSService:
         except Exception as e:
             log.exception(f"Exception while uploading to azure: {e}", e)
             return None
+
+    def is_system_busy(self, upload_id):
+        query, exclude, is_sys_busy = {"status": "InProgress"}, {"_id": False}, False
+        pending_jobs = dds_repo.search_dds(query, exclude, None, None)
+        if pending_jobs:
+            if len(pending_jobs) >= max_no_of_processes:
+                log.info(f'{upload_id} | The system is busy, no of proc: {len(pending_jobs)}')
+                is_sys_busy = True
+        return is_sys_busy
 
     def search_uploads(self, data):
         log.info("Searching for User Uploads......")

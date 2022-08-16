@@ -16,7 +16,6 @@ class UserService:
         pass
 
     def signup(self, user_signup_req):
-        # validations
         if "xKey" not in user_signup_req["metadata"].keys():
             return {"status": "Invalid Access", "message": "Signup Request Failed!"}
         log.info("Signing Up...")
@@ -33,7 +32,6 @@ class UserService:
         return {"status": "Success", "message": "User created Successfully"}
 
     def delete_user(self, user_delete_req):
-        # validations
         if "xKey" not in user_delete_req["metadata"].keys():
             return {"status": "Invalid Access", "message": "Delete Request Failed!"}
         log.info("Deleting User...")
@@ -46,7 +44,6 @@ class UserService:
         return {"status": "Success", "message": "User deleted Successfully"}
 
     def login(self, login_req):
-        # validations
         log.info("Logging in...")
         query = {"username": login_req["username"]}
         try:

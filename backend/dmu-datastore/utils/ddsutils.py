@@ -12,6 +12,7 @@ import os
 log = logging.getLogger('file')
 dds_repo = DDSRepo()
 
+
 class DDSUtils:
     def __init__(self):
         pass
@@ -47,11 +48,15 @@ class DDSUtils:
         try:
             with open(file_path, "rb") as data:
                 blob_client.upload_blob(data, overwrite=True)
-            dds_repo.update_dds_metadata({"uploadId": upload_id}, {"uploadStatus": "Completed", "lastUpdatedTimestamp": eval(str(time.time()).replace('.', '')[0:13])})
+            dds_repo.update_dds_metadata({"uploadId": upload_id}, {"uploadStatus": "Completed",
+                                                                   "lastUpdatedTimestamp": eval(
+                                                                       str(time.time()).replace('.', '')[0:13])})
             os.remove(file_path)
         except Exception as e:
             log.exception(f'Exception while pushing to azure blob storage: {e}', e)
-            dds_repo.update_dds_metadata({"uploadId": upload_id}, {"uploadStatus": "Failed", "lastUpdatedTimestamp": eval(str(time.time()).replace('.', '')[0:13])})
+            dds_repo.update_dds_metadata({"uploadId": upload_id}, {"uploadStatus": "Failed",
+                                                                   "lastUpdatedTimestamp": eval(
+                                                                       str(time.time()).replace('.', '')[0:13])})
 
     def camel_case(self, str):
         s = sub(r"(_|-)+", " ", str).title().replace(" ", "")

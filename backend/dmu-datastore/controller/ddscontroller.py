@@ -6,6 +6,7 @@ from logging.config import dictConfig
 from config.ddsconfigs import context_path, x_key
 from service.userservice import UserService
 from service.ddsservice import DDSService
+from utils.ddsvalidator import DDSValidator
 
 dds_app = Flask(__name__)
 log = logging.getLogger('file')
@@ -14,9 +15,12 @@ log = logging.getLogger('file')
 # REST endpoint for login
 @dds_app.route(context_path + '/v1/login', methods=["POST"])
 def login():
-    user_service = UserService()
+    user_service, validator = UserService(), DDSValidator()
     data = request.get_json()
     try:
+        validation_res = validator.validate_login_req(request)
+        if validation_res:
+            return jsonify(validation_res), 400
         response = user_service.login(data)
         if not response:
             return {"status": "FAILED", "message": "Something went wrong"}, 400
@@ -80,10 +84,13 @@ def delete_users():
 # REST endpoint for file upload (zip file)
 @dds_app.route(context_path + '/v1/file/upload', methods=["POST"])
 def doc_upload():
-    dds_service, user_service = DDSService(), UserService()
+    dds_service, user_service, validator = DDSService(), UserService(), DDSValidator()
     data = request.get_json()
     data = add_headers(data, request)
     try:
+        validation_res = validator.validate_upload_req(request)
+        if validation_res:
+            return jsonify(validation_res), 400
         if user_service.is_session_active(data["metadata"]["token"]):
             response = dds_service.upload(request, data)
             if "uploadId" in response.keys():
