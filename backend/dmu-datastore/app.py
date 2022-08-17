@@ -10,10 +10,12 @@ log = logging.getLogger('file')
 
 
 def create_local_storage_folder():
-    log.info(f"Creating an empty folder -- {local_storage_path}")
     if not os.path.exists(local_storage_path):
+        log.info(f"Creating an empty folder -- {local_storage_path}")
         os.makedirs(local_storage_path)
-        
+    else:
+        log.info(f"{local_storage_path} - Folder Exists!")
+
 
 if __name__ == '__main__':
     create_local_storage_folder()
