@@ -1,14 +1,22 @@
 #!/bin/python
 import logging
+import os
 
 from logging.config import dictConfig
 from controller.ddscontroller import dds_app
-from config.ddsconfigs import app_host
-from config.ddsconfigs import app_port
+from config.ddsconfigs import app_host, app_port, local_storage_path
 
 log = logging.getLogger('file')
 
+
+def create_local_storage_folder():
+    log.info(f"Creating an empty folder -- {local_storage_path}")
+    if not os.path.exists(local_storage_path):
+        os.makedirs(local_storage_path)
+        
+
 if __name__ == '__main__':
+    create_local_storage_folder()
     dds_app.run(host=app_host, port=eval(str(app_port)), threaded=True)
 
 # Log config
