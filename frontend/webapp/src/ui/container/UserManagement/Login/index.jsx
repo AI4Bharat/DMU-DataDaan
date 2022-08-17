@@ -18,6 +18,9 @@ import React, { useState, useEffect } from "react";
 import LoginStyles from "../../../styles/Login";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
+import config from "../../../../configs/config";
+import apiEndPoint from "../../../../configs/apiendpoints";
+import Snackbar from "../../../components/Snackbar";
 
 const Login = (props) => {
   const [values, setValues] = useState({
@@ -56,7 +59,38 @@ const Login = (props) => {
     event.preventDefault();
   };
 
-  const handleSubmit = async () => {};
+  const handleSubmit = async () => {
+    const apiendpoint = `${config.BASE_URL_AUTO}${apiEndPoint.login}`;
+    const { email, password } = values;
+    const body = JSON.stringify({ username: email, password });
+    fetch(apiendpoint, {
+      method: "POST",
+      body,
+      headers: { "Content-Type": "application/json" },
+    })
+      .then(async (res) => {
+        const rsp_data = await res.json();
+        if (res.ok) {
+          localStorage.setItem("userInfo", JSON.stringify(rsp_data));
+          history.push(`${process.env.PUBLIC_URL}/datadaan/upload-data`);
+        } else {
+          return Promise.reject(rsp_data);
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        setSnackbarInfo({
+          ...snackbar,
+          open: true,
+          message: err.message,
+          variant: "error",
+        });
+      });
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarInfo({ ...snackbar, open: false });
+  };
 
   const HandleSubmitCheck = () => {
     if (!values.email.trim() || !values.password.trim()) {
@@ -166,6 +200,15 @@ const Login = (props) => {
           </Typography>
         </div> */}
       </Grid>
+      {snackbar.open && (
+        <Snackbar
+          open={snackbar.open}
+          handleClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          message={snackbar.message}
+          variant={snackbar.variant}
+        />
+      )}
     </>
   );
 };

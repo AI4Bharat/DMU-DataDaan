@@ -7,7 +7,7 @@ import {
   Typography,
   Menu,
   MenuItem,
-  Button
+  Button,
 } from "@material-ui/core";
 import HeaderStyles from "../styles/HeaderStyles";
 import { translate } from "../../assets/localisation";
@@ -17,7 +17,6 @@ import bhashiniLogo from "../../assets/Bhashini_en.svg";
 import { useHistory } from "react-router-dom";
 import DownIcon from "@material-ui/icons/ArrowDropDown";
 import { useState } from "react";
-
 
 const StyledMenu = withStyles({
   paper: {
@@ -85,6 +84,7 @@ const Header = (props) => {
               <MenuItem
                 className={classes.styledMenu}
                 onClick={() => {
+                  localStorage.clear();
                   history.push(`${process.env.PUBLIC_URL}`);
                 }}
               >
