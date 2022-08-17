@@ -57,6 +57,13 @@ const Header = (props) => {
     <MuiThemeProvider theme={Theme}>
       <AppBar color="inherit" position="static">
         <Toolbar className={classes.toolbar}>
+        <Link href="https://bhashini.gov.in/en/">
+              <img
+                className={classes.bhashiniLogo}
+                src={bhashiniLogo}
+                alt="Bhashini Logo"
+              />
+            </Link>
           <Typography variant="h4">{translate("label.dmuDataDaan")}</Typography>
           <div className={classes.profile}>
             <Button

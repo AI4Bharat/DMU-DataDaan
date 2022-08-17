@@ -68,21 +68,21 @@ const UploadData = (props) => {
           <FileUpload acceptedFiles={[".zip"]} />
         </Grid>
       </Grid>
-      <Grid container spacing={5}>
+      <Grid container spacing={4} style={{paddingTop:'15px'}}>
         <Grid
           item
-          xs={6}
-          sm={6}
-          md={6}
-          lg={6}
-          xl={6}
+          xs={7}
+          sm={7}
+          md={7}
+          lg={7}
+          xl={7}
           className={classes.flexEnd}
         >
           <Button size="large" color="primary" variant="contained">
             Clear
           </Button>
         </Grid>
-        <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+        <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
           <Button size="large" color="primary" variant="contained">
             Submit
           </Button>
