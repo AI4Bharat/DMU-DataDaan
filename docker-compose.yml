@@ -6,6 +6,8 @@ services:
         build:
             context: ./frontend
             dockerfile: Dockerfile
+        environment:
+            REACT_APP_APIGW_BASE_URL: http://upload.dmu.ai4bharat.org/api
         ports:
             - "80:80"
         volumes: 
