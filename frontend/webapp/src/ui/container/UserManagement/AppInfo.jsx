@@ -1,7 +1,8 @@
-import { Grid, Hidden, Typography, withStyles } from "@material-ui/core";
+import { Grid, Hidden, Typography, withStyles, Link} from "@material-ui/core";
 import LoginStyles from "../../styles/Login";
 import { useHistory } from "react-router-dom";
 import { translate } from "../../../assets/localisation";
+import bhashiniLogo from "../../../assets/Bhashini_en.svg";
 
 function AppInfo(props) {
   const { classes } = props;
@@ -16,6 +17,13 @@ function AppInfo(props) {
       color={"primary"}
       className={classes.appInfo}
     >
+      {/* <Link href="https://bhashini.gov.in/en/">
+              <img
+                className={classes.logo}
+                src={bhashiniLogo}
+                alt="Bhashini Logo"
+              />
+            </Link> */}
       <Typography
         className={classes.title}
         variant={"h2"}

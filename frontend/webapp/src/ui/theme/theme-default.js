@@ -8,9 +8,9 @@ const themeDefault = createMuiTheme({
   overrides: {
     MuiDropzoneArea: {
       root: {
-        display:'flex',
-        justifyContent:'center',
-        alignItems:'center',
+        // display:'flex',
+        justifyContent: "center",
+        alignItems: "center",
         top: "auto",
         width: "50%",
         borderColor: "#1C9AB7",
@@ -29,6 +29,16 @@ const themeDefault = createMuiTheme({
         },
       },
     },
+    MuiDropzonePreviewList: {
+      image: {
+        maxWidth: "60%",
+      },
+    },
+    MuiInputBase:  {
+       fullWidth: { 
+         width: "80%" 
+        } 
+      },
     MuiTableRow: {
       root: {
         height: "60px",

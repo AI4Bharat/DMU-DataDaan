@@ -163,6 +163,11 @@ const LoginStyle = (theme) => ({
       fontFamily: '"lato" ,sans-serif',
       fontWeight: "600",
     },
+    logo: {
+      paddingTop:"30px",
+      paddingLeft:"40px",
+    },
+  
     subText: {
       marginTop: "-20px",
       opacity: "0.7",
