@@ -22,6 +22,7 @@ def index():
         message='Welcome to the DMU Backend Server!'
     )
 
+
 # REST endpoint for login
 @dds_app.route(context_path + '/v1/login', methods=["POST"])
 def login():
@@ -32,6 +33,7 @@ def login():
         if validation_res:
             return jsonify(validation_res), 400
         response = user_service.login(data)
+        log.info(response)
         if not response:
             return {"status": "FAILED", "message": "Something went wrong"}, 400
         if 'status' in response.keys():
@@ -146,10 +148,32 @@ def doc_delete():
         user_id = user_service.is_session_active(data["metadata"]["token"])
         if user_id:
             data = add_headers(data, request, user_id)
-            validation_res = validator.validate_delete_req(request)
+            validation_res = validator.validate_delete_req(data)
             if validation_res:
                 return jsonify(validation_res), 400
             response = dds_service.delete_uploads(data)
+            return jsonify(response), 200
+        response = {"status": "Invalid Access", "message": "You're not authorised to access this resource"}
+        return jsonify(response), 403
+    except Exception as e:
+        log.exception("Something went wrong: " + str(e), e)
+        return {"status": "FAILED", "message": "Something went wrong"}, 400
+
+
+# REST endpoint to search user uploads
+@dds_app.route(context_path + '/v1/terms/accept', methods=["POST"])
+def terms_accept():
+    user_service, validator = UserService(), DDSValidator()
+    data = request.get_json()
+    data = add_headers(data, request, "userId")
+    try:
+        user_id = user_service.is_session_active(data["metadata"]["token"])
+        if user_id:
+            data = add_headers(data, request, user_id)
+            validation_res = validator.validate_terms_and_cond(data)
+            if validation_res:
+                return jsonify(validation_res), 400
+            response = user_service.add_tc_to_user(data)
             return jsonify(response), 200
         response = {"status": "Invalid Access", "message": "You're not authorised to access this resource"}
         return jsonify(response), 403
