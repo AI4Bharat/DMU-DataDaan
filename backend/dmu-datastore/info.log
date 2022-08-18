@@ -676,3 +676,7 @@ KeyError: 'HTTP_X_USER_ID'
 [2022-08-16 16:44:28,883] {userservice.py:68} Thread-7 INFO in userservice: Checking if the user session is active.....
 [2022-08-16 16:44:28,891] {ddsservice.py:135} Thread-7 INFO in ddsservice: Searching for User Uploads......
 [2022-08-16 16:44:28,892] {_internal.py:113} Thread-7 INFO in _internal: 127.0.0.1 - - [16/Aug/2022 16:44:28] "[37mPOST /dmu-datastore/data-upload-service/v1/upload/search HTTP/1.1[0m" 200 -
+[2022-08-17 15:15:18,326] {app.py:13} MainThread INFO in app: Creating an empty folder -- /Users/vishalmahuli/Desktop/dmu-dus/docs
+[2022-08-17 15:15:18,328] {_internal.py:113} MainThread INFO in _internal:  * Running on http://localhost:5001/ (Press CTRL+C to quit)
+[2022-08-17 15:17:11,878] {app.py:17} MainThread INFO in app: /Users/vishalmahuli/Desktop/dmu-dus/docs - Folder Exists!
+[2022-08-17 15:17:11,880] {_internal.py:113} MainThread INFO in _internal:  * Running on http://localhost:5001/ (Press CTRL+C to quit)
