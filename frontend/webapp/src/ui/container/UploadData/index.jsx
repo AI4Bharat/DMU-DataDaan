@@ -69,6 +69,7 @@ const UploadData = (props) => {
 
   const handleZipFileChange = (files) => {
     console.log("handleZipFileChange", files);
+    //console.log("handleZipFileChange", files);
     // handleFileChange(files);
     setZip(files);
   };
