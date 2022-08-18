@@ -9,6 +9,10 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 COPY /dmu-datastore/ /app
+COPY entrypoint.sh /app
 WORKDIR /app
 
 RUN pip3 install -r requirements.txt
+
+RUN ["chmod", "+x", "./entrypoint.sh"]
+ENTRYPOINT ["./entrypoint.sh"]

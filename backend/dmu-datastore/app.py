@@ -8,7 +8,6 @@ from config.ddsconfigs import app_host, app_port, local_storage_path
 
 log = logging.getLogger('file')
 
-
 def create_local_storage_folder():
     log.info(f"Creating an empty folder -- {local_storage_path}")
     if not os.path.exists(local_storage_path):

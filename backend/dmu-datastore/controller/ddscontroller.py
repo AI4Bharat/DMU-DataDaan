@@ -7,8 +7,11 @@ from config.ddsconfigs import context_path, x_key
 from service.userservice import UserService
 from service.ddsservice import DDSService
 from utils.ddsvalidator import DDSValidator
+from flask_cors import CORS, cross_origin
 
 dds_app = Flask(__name__)
+cors = CORS(dds_app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+
 log = logging.getLogger('file')
 
 
