@@ -39,6 +39,11 @@ class UserRepo:
         col.insert_many(data)
         return len(data)
 
+    def update_users(self, find_query, set_clause):
+        col = self.get_user_connection()
+        updated = col.update(find_query, {"$set": set_clause})
+        return updated
+
     # Searches the object into mongo collection
     def search_users(self, query, exclude, offset, res_limit):
         col = self.get_user_connection()

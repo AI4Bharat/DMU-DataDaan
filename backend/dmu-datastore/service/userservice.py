@@ -56,7 +56,9 @@ class UserService:
                 login_entity = {"userId": user["userId"], "token": str(uuid.uuid4()),
                                 "createdAt": eval(str(time.time()).replace('.', '')[0:13]), "expired": False}
                 user_repo.login(login_entity)
-                user_data = {"token": login_entity["token"], "user": {"userId": user["userId"], "email": user["email"]}}
+                del user["password"]
+                del user["salt"]
+                user_data = {"token": login_entity["token"], "user": user}
                 return user_data
             else:
                 return {"status": "login failed", "message": "Invalid Password"}
@@ -90,6 +92,23 @@ class UserService:
             if logged_out > 0:
                 log.info(f'Logged out successfully!')
                 return {"status": "Success", "message": "logged out!"}
+        except Exception as e:
+            log.exception(f"Exception while logging in: {e}", e)
+            return None
+
+    def add_tc_to_user(self, data):
+        log.info("Updating T&C...")
+        try:
+            user_id = data["metadata"]["userId"]
+            user = user_repo.search_users({"userId": user_id}, {'_id': False}, None, None)[0]
+            if 'termsAndConditions' in user.keys():
+                return {"status": "FAILED", "message": "This user has already accepted T&C"}
+            else:
+                terms_and_cond = data
+                del terms_and_cond["metadata"]
+                terms_and_cond["acceptedTimestamp"] = eval(str(time.time()).replace('.', '')[0:13])
+                user_repo.update_users({"userId": user_id}, {"termsAndConditions": terms_and_cond})
+                return {"status": "Success", "message": "T&C acceptance recorded!"}
         except Exception as e:
             log.exception(f"Exception while logging in: {e}", e)
             return None

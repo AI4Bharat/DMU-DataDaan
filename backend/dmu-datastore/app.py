@@ -1,12 +1,19 @@
 #!/bin/python
+import json
 import logging
 import os
 
 from logging.config import dictConfig
+from utils.ddsvalidator import DDSValidator
+
+import requests
+
 from controller.ddscontroller import dds_app
-from config.ddsconfigs import app_host, app_port, local_storage_path
+from config.ddsconfigs import app_host, app_port, local_storage_path, t_and_c_file
 
 log = logging.getLogger('file')
+list_of_tc_keys = []
+
 
 def create_local_storage_folder():
     if not os.path.exists(local_storage_path):
@@ -18,6 +25,8 @@ def create_local_storage_folder():
 
 if __name__ == '__main__':
     create_local_storage_folder()
+    validator = DDSValidator()
+    validator.fetch_tc_keys()
     dds_app.run(host=app_host, port=eval(str(app_port)), threaded=True)
 
 # Log config
