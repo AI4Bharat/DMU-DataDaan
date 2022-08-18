@@ -6,13 +6,19 @@ import FileUpload from "../../components/FileUpload";
 import GlobalStyles from "../../styles/Styles";
 import TermsAndConditionModal from "./TermsAndConditionsModal";
 import { useHistory } from "react-router-dom";
+import { useEffect } from "react";
 
 const UploadData = (props) => {
   const { classes } = props;
-  const [modal, setModal] = useState(true);
+  const [modal, setModal] = useState(false);
   const [checkbox,setCheckbox] = useState(false);
 
   const history = useHistory();
+
+  useEffect(()=>{
+    const isAccepted = localStorage.getItem('isAccepted');
+    setModal(!isAccepted);
+  },[])
 
   const handleClose = () => {
     setModal(false);
@@ -23,6 +29,7 @@ const UploadData = (props) => {
   };
 
   const handleAgree = () => {
+    localStorage.setItem('isAccepted',true);
     handleClose();
   };
 

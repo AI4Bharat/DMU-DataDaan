@@ -15,12 +15,18 @@ import {
   Link,
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
+import { useState } from "react";
 import Modal from "../../components/Modal";
 import GlobalStyles from "../../styles/Styles";
 
 const TermsAndConditionModal = ({ open, handleClose, ...props }) => {
   const { classes, handleAgree, handleCancel, isChecked, toggleCheckbox } =
     props;
+  const [radio, setRadio] = useState(null);
+  const handleRadioBtnChange = (e) => {
+    setRadio(e.target.name);
+  };
+
   return (
     <Modal
       disableEscapeKeyDown
@@ -60,7 +66,12 @@ const TermsAndConditionModal = ({ open, handleClose, ...props }) => {
               <span>{`\n\nYour organization has generated a large volume of digital multilingual content for public purposes, much of which is already in the public domain. Sharing of such content with Bhashini would go a long way in helping realize the vision of a language-barriers-free India.\n\nPlease upload the content you intend to share onto the portal as a zipped tar file and a README file. The zipped tar file should include all content such as (pdf, docx, pptx, mp3, wav, jpeg, png files).  The README file should contain the metadata with the directory structure of the tar file. In addition, metadata  should contain a short description, format, language, domain for content file. The DMU team of Bhashini is available to assist in the creation of this README file.\n\nPlease select one of the two following terms under which the content is being shared with Bhashini:\n\n`}</span>
             </Grid>
             <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-              <input id="radio1" type="radio" name="radio" />
+              <input
+                id="radio1"
+                type="radio"
+                name="radio"
+                onChange={handleRadioBtnChange}
+              />
               <label htmlFor="test">
                 {" "}
                 Bhashini is granted the right to create and publish datasets for
@@ -75,8 +86,14 @@ const TermsAndConditionModal = ({ open, handleClose, ...props }) => {
                 it will maximize the utility of the datasets for training AI
                 models
               </label>{" "}
-              <br /><br />
-              <input id="radio2" type="radio" name="radio" />
+              <br />
+              <br />
+              <input
+                id="radio2"
+                type="radio"
+                name="radio"
+                onChange={handleRadioBtnChange}
+              />
               <label htmlFor="test">
                 {" "}
                 Bhashini requests to be granted the right to train AI models
@@ -99,6 +116,7 @@ const TermsAndConditionModal = ({ open, handleClose, ...props }) => {
                     name="termsandconditions"
                     value={isChecked}
                     onChange={toggleCheckbox}
+                    disabled={!radio}
                   />
                 }
                 label="I accept the terms and conditions"
