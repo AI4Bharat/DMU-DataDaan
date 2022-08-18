@@ -14,7 +14,7 @@ class DDSValidator:
         try:
             if dds_service.is_system_busy():
                 return {"status": "FAILED", "message": "The System is currently busy, please try after sometime."}
-            log.info("Validating the request.........")
+            log.info("Validating the Upload request.........")
             files = api_request.files
             if 'metadata' not in files.keys():
                 return {"status": "VALIDATION_FAILED", "message": "metadata is mandatory!"}
@@ -27,7 +27,7 @@ class DDSValidator:
 
     def validate_login_req(self, api_request):
         try:
-            log.info("Validating the request.........")
+            log.info("Validating the Login request.........")
             data = api_request.get_json()
             if 'username' not in data.keys():
                 return {"status": "VALIDATION_FAILED", "message": "username is mandatory!"}
@@ -39,7 +39,17 @@ class DDSValidator:
 
     def validate_delete_req(self, api_request):
         try:
-            log.info("Validating the request.........")
+            log.info("Validating the Delete Uploads request.........")
+            data = api_request.get_json()
+            if 'uploadIds' not in data.keys():
+                return {"status": "VALIDATION_FAILED", "message": "uploadIds is mandatory!"}
+        except Exception as e:
+            log.exception(f"Exception in login validation: {e}", e)
+            return {"status": "VALIDATION_FAILED", "message": "mandatory fields missing."}
+
+    def validate_terms_ip(self, api_request):
+        try:
+            log.info("Validating the T&C request.........")
             data = api_request.get_json()
             if 'uploadIds' not in data.keys():
                 return {"status": "VALIDATION_FAILED", "message": "uploadIds is mandatory!"}

@@ -680,3 +680,5 @@ KeyError: 'HTTP_X_USER_ID'
 [2022-08-17 15:15:18,328] {_internal.py:113} MainThread INFO in _internal:  * Running on http://localhost:5001/ (Press CTRL+C to quit)
 [2022-08-17 15:17:11,878] {app.py:17} MainThread INFO in app: /Users/vishalmahuli/Desktop/dmu-dus/docs - Folder Exists!
 [2022-08-17 15:17:11,880] {_internal.py:113} MainThread INFO in _internal:  * Running on http://localhost:5001/ (Press CTRL+C to quit)
+[2022-08-18 14:57:55,757] {app.py:17} MainThread INFO in app: /Users/vishalmahuli/Desktop/dmu-dus/docs - Folder Exists!
+[2022-08-18 14:57:55,760] {_internal.py:113} MainThread INFO in _internal:  * Running on http://localhost:5001/ (Press CTRL+C to quit)

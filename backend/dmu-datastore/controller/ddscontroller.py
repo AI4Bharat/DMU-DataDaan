@@ -158,6 +158,28 @@ def doc_delete():
         return {"status": "FAILED", "message": "Something went wrong"}, 400
 
 
+# REST endpoint to search user uploads
+@dds_app.route(context_path + '/v1/terms/accept', methods=["POST"])
+def terms_accept():
+    dds_service, user_service, validator = DDSService(), UserService(), DDSValidator()
+    data = request.get_json()
+    data = add_headers(data, request, "userId")
+    try:
+        user_id = user_service.is_session_active(data["metadata"]["token"])
+        if user_id:
+            data = add_headers(data, request, user_id)
+            validation_res = validator.validate_delete_req(request)
+            if validation_res:
+                return jsonify(validation_res), 400
+            response = dds_service.delete_uploads(data)
+            return jsonify(response), 200
+        response = {"status": "Invalid Access", "message": "You're not authorised to access this resource"}
+        return jsonify(response), 403
+    except Exception as e:
+        log.exception("Something went wrong: " + str(e), e)
+        return {"status": "FAILED", "message": "Something went wrong"}, 400
+
+
 # Fetches required headers from the request and adds it to the body.
 def add_headers(data, api_request, user_id):
     if not data:
