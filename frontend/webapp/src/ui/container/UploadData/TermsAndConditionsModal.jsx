@@ -59,19 +59,35 @@ const TermsAndConditionModal = ({ open, handleClose, ...props }) => {
               <Link href="https://bhashini.gov.in">Bhashini.</Link>
               <span>{`\n\nYour organization has generated a large volume of digital multilingual content for public purposes, much of which is already in the public domain. Sharing of such content with Bhashini would go a long way in helping realize the vision of a language-barriers-free India.\n\nPlease upload the content you intend to share onto the portal as a zipped tar file and a README file. The zipped tar file should include all content such as (pdf, docx, pptx, mp3, wav, jpeg, png files).  The README file should contain the metadata with the directory structure of the tar file. In addition, metadata  should contain a short description, format, language, domain for content file. The DMU team of Bhashini is available to assist in the creation of this README file.\n\nPlease select one of the two following terms under which the content is being shared with Bhashini:\n\n`}</span>
             </Grid>
+            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+              <input id="radio1" type="radio" name="radio" />
+              <label htmlFor="test">
+                {" "}
+                Bhashini is granted the right to create and publish datasets for
+                training AI models from the content shared. These datasets will
+                be created by extracting a fraction of the content shared,
+                processing and reshuffling the extracted content with other
+                content sources so that it is impossible to recreate the
+                original content from the dataset. The datasets shall be
+                published using a Creative Commons (CC by 4.0) with attribution
+                to the original contributors content. This is the preferred way
+                to share content for which your organization has full rights as
+                it will maximize the utility of the datasets for training AI
+                models
+              </label>{" "}
+              <br /><br />
+              <input id="radio2" type="radio" name="radio" />
+              <label htmlFor="test">
+                {" "}
+                Bhashini requests to be granted the right to train AI models
+                from the content shared. The trained AI models shall be
+                published using a Creative Commons (CC by 4.0) with attribution
+                to the original contributors content. However, no public
+                datasets will be created from the content shared.
+              </label>{" "}
+              <br />
+            </Grid>
           </Grid>
-          {/* <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-            <FormControlLabel
-              value="bgv"
-              control={<Radio />}
-              label={`Bhashini is granted the right to create and publish datasets for training AI models from the content shared. These datasets will be created by extracting a fraction of the content shared, processing and reshuffling the extracted content with other content sources so that it is impossible to recreate the original content from the dataset. The datasets shall be published using a Creative Commons (CC by 4.0) with attribution to the original contributors content. This is the preferred way to share content for which your organization has full rights as it will maximize the utility of the datasets for training AI models\n\n`}
-            />
-            <FormControlLabel
-              value="bgva"
-              control={<Radio />}
-              label={`Bhashini requests to be granted the right to train AI models from the content shared. The trained AI models shall be published using a Creative Commons (CC by 4.0) with attribution to the original contributors content. However, no public datasets will be created from the content shared.`}
-            />
-          </Grid> */}
         </CardContent>
         <CardActions>
           <Grid container spacing={0}>
