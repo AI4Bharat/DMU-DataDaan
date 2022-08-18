@@ -20,6 +20,14 @@ const UploadData = (props) => {
   const [zip, setZip] = useState([]);
   const [loading, setLoading] = useState(false);
   const history = useHistory();
+  const [snackbar, setSnackbarInfo] = useState({
+    open: false,
+    message: "",
+    variant: "success",
+  });
+  const handleSnackbarClose = () => {
+    setSnackbarInfo({ ...snackbar, open: false });
+  };
 
   useEffect(() => {
     // setLoading(false);
@@ -87,9 +95,26 @@ const UploadData = (props) => {
       headers: apiObj.getHeaders().headers,
     })
     .then(async res=>{
-      console.log(res.ok);
+      const rsp_data = await res.json();
+      if(res.ok){
+        setSnackbarInfo({
+          ...snackbar,
+          open: true,
+          message: rsp_data.message,
+          variant: "success",
+        });
+      }
       setLoading(false);
     })
+    .catch((err) => {
+      setLoading(false);
+      setSnackbarInfo({
+        ...snackbar,
+        open: true,
+        message: err.message,
+        variant: "error",
+      });
+    });
 
     // const apiendpoint = `${config.BASE_URL_AUTO}${apiendpoints.upload}`;
     // const {
@@ -212,6 +237,15 @@ const UploadData = (props) => {
           handleClose={handleClose}
           handleAgree={handleAgree}
           handleCancel={handleCancel}
+        />
+      )}
+      {snackbar.open && (
+        <Snackbar
+          open={snackbar.open}
+          handleClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          message={snackbar.message}
+          variant={snackbar.variant}
         />
       )}
     </>
