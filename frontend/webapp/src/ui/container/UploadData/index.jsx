@@ -63,6 +63,7 @@ const UploadData = (props) => {
 
   const handleMetaFileChange = (files) => {
     console.log("handleMetaFileChange", files);
+   // console.log("here");
     // handleFileChange(files);
     setMeta(files);
   };
