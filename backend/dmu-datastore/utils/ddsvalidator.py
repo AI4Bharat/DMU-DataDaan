@@ -40,10 +40,10 @@ class DDSValidator:
                 return {"status": "FAILED", "message": "The System is currently busy, please try after sometime."}
             log.info("Validating the Upload request.........")
             files = api_request.files
-            if 'metadata' not in files.keys():
-                return {"status": "VALIDATION_FAILED", "message": "metadata is mandatory!"}
             if 'zipFile' not in files.keys():
                 return {"status": "VALIDATION_FAILED", "message": "zipFile is mandatory!"}
+            if 'metadata' not in files.keys():
+                return {"status": "VALIDATION_FAILED", "message": "metadata is mandatory!"}
             return None
         except Exception as e:
             log.exception(f"Exception in upload validation: {e}", e)
