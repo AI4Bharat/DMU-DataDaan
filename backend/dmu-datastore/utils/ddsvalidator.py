@@ -22,6 +22,7 @@ class DDSValidator:
         log.info(f"Reading T&C from - {t_and_c_file}")
         response = json.loads(requests.get(t_and_c_file).text)
         if response:
+            response = response["termsAndConditions"]
             for k in response.keys():
                 val_list = response[k]
                 if val_list:
@@ -39,10 +40,10 @@ class DDSValidator:
                 return {"status": "FAILED", "message": "The System is currently busy, please try after sometime."}
             log.info("Validating the Upload request.........")
             files = api_request.files
-            if 'metadata' not in files.keys():
-                return {"status": "VALIDATION_FAILED", "message": "metadata is mandatory!"}
             if 'zipFile' not in files.keys():
                 return {"status": "VALIDATION_FAILED", "message": "zipFile is mandatory!"}
+            if 'metadata' not in files.keys():
+                return {"status": "VALIDATION_FAILED", "message": "metadata is mandatory!"}
             return None
         except Exception as e:
             log.exception(f"Exception in upload validation: {e}", e)

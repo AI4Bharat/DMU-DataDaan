@@ -12,7 +12,7 @@ session_timeout_in_ms = os.environ.get('DMU_DUS_SESSION_TIMEOUT_IN_MS', 86400000
 if isinstance(session_timeout_in_ms, str):
     session_timeout_in_ms = eval(session_timeout_in_ms)
 allowed_file_types = ["zip"]
-allowed_metadata_file_types = ["tsv"]
+allowed_metadata_file_types = ["txt"]
 local_storage_path = os.environ.get('DMU_DUS_LOCAL_STORAGE_PATH', "/Users/vishalmahuli/Desktop/dmu-dus/docs")
 azure_connection_string = os.environ.get('DMU_DUS_AZURE_CONNECTION_STRING', "connection_string")
 azure_container_name = os.environ.get('DMU_DUS_AZURE_FILE_CONTAINER', "container")
@@ -20,7 +20,7 @@ azure_account_name = os.environ.get('DMU_DUS_AZURE_ACCOUNT_NAME', "account")
 azure_link_prefix = f'https://{azure_account_name}.blob.core.windows.net/{azure_container_name}/'
 x_key = os.environ.get('DMU_DUS_X_KEY', "d6fd7481-f43e-4b76-b882-2ec512350d75")
 max_no_of_processes = os.environ.get('DMU_DUS_MAX_NO_OF_PROC', 10)
-t_and_c_file = os.environ.get('DMU_DUS_T_AND_C_FILE_PATH', "https://raw.githubusercontent.com/AI4Bharat/DMU-DataDaan/dmu_dus/docs/masterdata/termsAndConditions.json?token=GHSAT0AAAAAABWIDP3WEAUEIGF6N6PS6PPMYX6CSLA")
+t_and_c_file = os.environ.get('DMU_DUS_T_AND_C_FILE_PATH', "https://raw.githubusercontent.com/AI4Bharat/DMU-DataDaan/dmu_dus/docs/masterdata/termsAndConditions.json?token=GHSAT0AAAAAABWIDP3XONXL7XGOX2RAREZEYX7MP6A")
 if isinstance(max_no_of_processes, str):
     max_no_of_processes = eval(max_no_of_processes)
 max_media_file_size_in_mb = os.environ.get('DMU_DUS_MAX_MEDIA_FILE_SIZE_IN_MB', 5000)
