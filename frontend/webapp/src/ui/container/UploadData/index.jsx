@@ -164,7 +164,7 @@ const UploadData = (props) => {
           <Typography>Metadata File</Typography>
           <Link
             className={classes.flexCenter}
-            href="https://docs.google.com/spreadsheets/d/1jo9Pr2rbg_gph78pbM-0oXdxRrA4RaKRSZGNDRn7E4k/edit#gid=0 "
+            href="https://docs.google.com/spreadsheets/d/1jo9Pr2rbg_gph78pbM-0oXdxRrA4RaKRSZGNDRn7E4k/export?format=xlsx"
           >
             (Format available here)
           </Link>
