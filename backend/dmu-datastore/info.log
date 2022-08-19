@@ -739,3 +739,7 @@ KeyError: 'HTTP_X_USER_ID'
 [2022-08-18 15:56:39,012] {userservice.py:47} Thread-5 INFO in userservice: Logging in...
 [2022-08-18 15:56:39,289] {ddscontroller.py:35} Thread-5 INFO in ddscontroller: {'token': 'ba7436f8-add8-4b99-a978-d4a817fdda37', 'user': {'email': 'vishal.mahuli@tarento.com', 'username': 'vishal.mahuli@tarento.com', 'userId': '495fd66c-d074-46e6-ac54-aa65f831f8e3', 'termsAndConditions': {'termsAndConditions': 'TERMS_AND_CONDITIONS_V0', 'permission': 'BHASHINI_IS_GRANTED_V0', 'acceptedTimestamp': 1660818377816}}}
 [2022-08-18 15:56:39,290] {_internal.py:113} Thread-5 INFO in _internal: 127.0.0.1 - - [18/Aug/2022 15:56:39] "[37mPOST /dmu-datastore/data-upload-service/v1/login HTTP/1.1[0m" 200 -
+[2022-08-19 14:32:49,514] {app.py:23} MainThread INFO in app: /Users/vishalmahuli/Desktop/dmu-dus/docs - Folder Exists!
+[2022-08-19 14:32:49,515] {ddsvalidator.py:22} MainThread INFO in ddsvalidator: Reading T&C from - https://raw.githubusercontent.com/AI4Bharat/DMU-DataDaan/dmu_dus/docs/masterdata/termsAndConditions.json?token=GHSAT0AAAAAABWIDP3WEAUEIGF6N6PS6PPMYX6CSLA
+[2022-08-19 14:34:13,589] {app.py:23} MainThread INFO in app: /Users/vishalmahuli/Desktop/dmu-dus/docs - Folder Exists!
+[2022-08-19 14:34:13,590] {ddsvalidator.py:22} MainThread INFO in ddsvalidator: Reading T&C from - https://raw.githubusercontent.com/AI4Bharat/DMU-DataDaan/dmu_dus/docs/masterdata/termsAndConditions.json?token=GHSAT0AAAAAABWIDP3WEAUEIGF6N6PS6PPMYX6CSLA

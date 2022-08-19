@@ -26,7 +26,7 @@ class DDSService:
     def upload(self, api_request, data):
         upload_id = str(uuid.uuid4())
         log.info(f"{upload_id} | Initiating...")
-        metadata = self.parse_metadata_csv(api_request, upload_id)
+        metadata = self.parse_metadata_file(api_request, upload_id)
         if not metadata:
             log.info(f"{upload_id} | Metadata file couldn't be parsed!")
             return {"status": "FAILED", "message": "Metadata file couldn't be parsed!"}
@@ -50,7 +50,7 @@ class DDSService:
             log.info(f"{upload_id} | File upload failed.")
             return {"status": "FAILED", "message": "File Upload Failed!"}
 
-    def parse_metadata_csv(self, api_request, upload_id):
+    def parse_metadata_file(self, api_request, upload_id):
         log.info(f"{upload_id} | Parsing metadata file...")
         try:
             file = api_request.files['metadata']
@@ -72,11 +72,15 @@ class DDSService:
                 os.remove(filepath)
                 log.info(f"{upload_id} | Metadata File too Large!")
                 return {"status": "FAILED", "message": f"File too Large, Allowed metadata file size: {max_metadata_file_size_in_mb}MB"}
+            '''
             result = {}
             with open(filepath, 'r') as f:
                 red = csv.DictReader(f, delimiter="\t")
                 for d in red:
                     result.setdefault(d['Field'], d['Value'])
+            '''
+            file = open(filepath, "r")
+            result = {"content": file.read()}
             return result, filepath
         except Exception as e:
             log.exception(f"Exception while parsing metadata: {e}", e)
