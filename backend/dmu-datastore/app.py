@@ -6,10 +6,8 @@ import os
 from logging.config import dictConfig
 from utils.ddsvalidator import DDSValidator
 
-import requests
-
 from controller.ddscontroller import dds_app
-from config.ddsconfigs import app_host, app_port, local_storage_path, t_and_c_file
+from config.ddsconfigs import app_host, app_port, local_storage_path
 
 log = logging.getLogger('file')
 list_of_tc_keys = []

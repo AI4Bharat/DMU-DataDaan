@@ -22,6 +22,7 @@ class DDSValidator:
         log.info(f"Reading T&C from - {t_and_c_file}")
         response = json.loads(requests.get(t_and_c_file).text)
         if response:
+            response = response["termsAndConditions"]
             for k in response.keys():
                 val_list = response[k]
                 if val_list:

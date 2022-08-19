@@ -743,3 +743,11 @@ KeyError: 'HTTP_X_USER_ID'
 [2022-08-19 14:32:49,515] {ddsvalidator.py:22} MainThread INFO in ddsvalidator: Reading T&C from - https://raw.githubusercontent.com/AI4Bharat/DMU-DataDaan/dmu_dus/docs/masterdata/termsAndConditions.json?token=GHSAT0AAAAAABWIDP3WEAUEIGF6N6PS6PPMYX6CSLA
 [2022-08-19 14:34:13,589] {app.py:23} MainThread INFO in app: /Users/vishalmahuli/Desktop/dmu-dus/docs - Folder Exists!
 [2022-08-19 14:34:13,590] {ddsvalidator.py:22} MainThread INFO in ddsvalidator: Reading T&C from - https://raw.githubusercontent.com/AI4Bharat/DMU-DataDaan/dmu_dus/docs/masterdata/termsAndConditions.json?token=GHSAT0AAAAAABWIDP3WEAUEIGF6N6PS6PPMYX6CSLA
+[2022-08-19 14:41:43,633] {app.py:23} MainThread INFO in app: /Users/vishalmahuli/Desktop/dmu-dus/docs - Folder Exists!
+[2022-08-19 14:41:43,634] {ddsvalidator.py:22} MainThread INFO in ddsvalidator: Reading T&C from - https://raw.githubusercontent.com/AI4Bharat/DMU-DataDaan/dmu_dus/docs/masterdata/termsAndConditions.json?token=GHSAT0AAAAAABWIDP3WEAUEIGF6N6PS6PPMYX6CSLA
+[2022-08-19 14:44:59,713] {app.py:21} MainThread INFO in app: /Users/vishalmahuli/Desktop/dmu-dus/docs - Folder Exists!
+[2022-08-19 14:44:59,731] {ddsvalidator.py:22} MainThread INFO in ddsvalidator: Reading T&C from - https://raw.githubusercontent.com/AI4Bharat/DMU-DataDaan/dmu_dus/docs/masterdata/termsAndConditions.json?token=GHSAT0AAAAAABWIDP3WEAUEIGF6N6PS6PPMYX6CSLA
+[2022-08-19 14:45:22,844] {app.py:21} MainThread INFO in app: /Users/vishalmahuli/Desktop/dmu-dus/docs - Folder Exists!
+[2022-08-19 14:45:22,845] {ddsvalidator.py:22} MainThread INFO in ddsvalidator: Reading T&C from - https://raw.githubusercontent.com/AI4Bharat/DMU-DataDaan/dmu_dus/docs/masterdata/termsAndConditions.json?token=GHSAT0AAAAAABWIDP3WEAUEIGF6N6PS6PPMYX6CSLA
+[2022-08-19 14:46:01,847] {app.py:21} MainThread INFO in app: /Users/vishalmahuli/Desktop/dmu-dus/docs - Folder Exists!
+[2022-08-19 14:46:01,847] {ddsvalidator.py:22} MainThread INFO in ddsvalidator: Reading T&C from - https://raw.githubusercontent.com/AI4Bharat/DMU-DataDaan/dmu_dus/docs/masterdata/termsAndConditions.json?token=GHSAT0AAAAAABWIDP3WEAUEIGF6N6PS6PPMYX6CSLA
