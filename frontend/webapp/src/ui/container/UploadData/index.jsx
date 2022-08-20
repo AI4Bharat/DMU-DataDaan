@@ -161,17 +161,17 @@ const UploadData = (props) => {
           xl={6}
           className={classes.flexCenter}
         >
-          <Typography>Metadata File</Typography>
-          <Link
+          <Typography>README.txt</Typography>
+          {/* <Link
             className={classes.flexCenter}
             href="https://docs.google.com/spreadsheets/d/1jo9Pr2rbg_gph78pbM-0oXdxRrA4RaKRSZGNDRn7E4k/export?format=xlsx"
           >
             (Format available here)
-          </Link>
+          </Link> */}
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <FileUpload
-            acceptedFiles={[".xlsx",".tsv"]}
+            acceptedFiles={[".txt"]}
             handleFileChange={handleMetaFileChange}
             handleFileDelete={clearFiles}
             label={meta.length>0 ? meta[0].name: ""}
