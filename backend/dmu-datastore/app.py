@@ -20,11 +20,14 @@ def create_local_storage_folder():
     else:
         log.info(f"{local_storage_path} - Folder Exists!")
 
+create_local_storage_folder()
+utils = DDSUtils()
+utils.fetch_tc_keys()
 
 if __name__ == '__main__':
-    create_local_storage_folder()
-    utils = DDSUtils()
-    utils.fetch_tc_keys()
+    # create_local_storage_folder()
+    # utils = DDSUtils()
+    # utils.fetch_tc_keys()
     dds_app.run(host=app_host, port=eval(str(app_port)), threaded=True)
 
 # Log config
