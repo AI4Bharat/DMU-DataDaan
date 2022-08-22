@@ -901,3 +901,6 @@ KeyError: 'HTTP_X_USER_ID'
 [2022-08-22 11:37:21,575] {app.py:21} MainThread INFO in app: /Users/vishalmahuli/Desktop/dmu-dus/docs - Folder Exists!
 [2022-08-22 11:37:21,575] {ddsvalidator.py:22} MainThread INFO in ddsvalidator: Reading T&C from - /Users/vishalmahuli/Desktop/dmu-dus/DMU-DataDaan/backend/dmu-datastore/config/termsAndConditions.json
 [2022-08-22 11:37:21,578] {_internal.py:113} MainThread INFO in _internal:  * Running on http://localhost:5001/ (Press CTRL+C to quit)
+[2022-08-22 12:06:50,025] {app.py:21} MainThread INFO in app: /Users/vishalmahuli/Desktop/dmu-dus/docs - Folder Exists!
+[2022-08-22 12:06:50,026] {ddsutils.py:87} MainThread INFO in ddsutils: Reading T&C from - /Users/vishalmahuli/Desktop/dmu-dus/DMU-DataDaan/backend/dmu-datastore/config/termsAndConditions.json
+[2022-08-22 12:06:50,028] {_internal.py:113} MainThread INFO in _internal:  * Running on http://localhost:5001/ (Press CTRL+C to quit)

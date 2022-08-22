@@ -104,5 +104,6 @@ class DDSUtils:
             log.exception(f"Exception while reading T&C file: {e}", e)
 
     def get_t_and_c(self):
+        global t_and_c_data
         log.info("Getting T&C....")
         return t_and_c_data
