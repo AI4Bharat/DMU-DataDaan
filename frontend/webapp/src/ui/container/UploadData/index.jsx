@@ -12,6 +12,8 @@ import config from "../../../configs/config";
 import apiendpoints from "../../../configs/apiendpoints";
 import Spinner from "../../components/Spinner";
 import Snackbar from "../../components/Snackbar";
+import LinearIndeterminate from "../../components/LinearProgress";
+
 const UploadData = (props) => {
   const { classes } = props;
   const [modal, setModal] = useState(false);
@@ -88,6 +90,12 @@ const UploadData = (props) => {
   };
 
   const handleSubmit = () => {
+    setSnackbarInfo({
+      ...snackbar,
+      open: true,
+      message: "Upload in progress. Please wait, it can take several minutes depending on the size",
+      variant: "info",
+    });
     setLoading(true);
     const apiObj = new FileUploadAPI(meta,zip)
     fetch(apiObj.apiEndPoint(), {
@@ -104,6 +112,8 @@ const UploadData = (props) => {
           message: rsp_data.message,
           variant: "success",
         });
+      }else{
+        return Promise.reject(rsp_data)
       }
       setLoading(false);
     })
@@ -150,7 +160,8 @@ const UploadData = (props) => {
 
   return (
     <>
-    {loading && <Spinner />}
+    {/* {loading && <Spinner />} */}
+    {loading && <LinearIndeterminate />}
       <Grid container spacing={4} style={{marginTop:"80px", paddingRight:"150px" }}>
         <Grid
           item
