@@ -2,9 +2,10 @@ import logging
 
 from repository.ddsrepo import DDSRepo
 from service.ddsservice import DDSService
+from .ddsutils import DDSUtils
 
 log = logging.getLogger('file')
-dds_repo, dds_service = DDSRepo(), DDSService()
+dds_repo, dds_service, utils = DDSRepo(), DDSService(), DDSUtils()
 
 
 class DDSValidator:
@@ -48,7 +49,7 @@ class DDSValidator:
             return {"status": "VALIDATION_FAILED", "message": "mandatory fields missing."}
 
     def validate_terms_and_cond(self, data):
-        global list_of_tc_keys
+        list_of_tc_keys = utils.get_t_and_c()[1]
         try:
             log.info("Validating the T&C request.........")
             if 'termsAndConditions' not in data.keys():

@@ -107,6 +107,6 @@ class DDSUtils:
 
     def get_t_and_c(self):
         global t_and_c_data
+        global list_of_tc_keys
         log.info("Getting T&C....")
-        log.info(t_and_c_data)
-        return t_and_c_data
+        return t_and_c_data, list_of_tc_keys

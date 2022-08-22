@@ -188,7 +188,7 @@ def terms_accept():
 def terms_search():
     utils = DDSUtils()
     try:
-        response = utils.get_t_and_c()
+        response = utils.get_t_and_c()[0]
         return jsonify(response), 200
     except Exception as e:
         log.exception("Something went wrong: " + str(e), e)
