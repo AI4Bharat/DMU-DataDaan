@@ -88,6 +88,7 @@ class DDSUtils:
         try:
             with open(t_and_c_file, 'r') as f:
                 t_and_c_data = json.load(f)
+                log.info(t_and_c_data)
             if t_and_c_data:
                 data = t_and_c_data["termsAndConditions"]
                 for k in data.keys():
@@ -99,6 +100,7 @@ class DDSUtils:
             else:
                 log.info(f"T&C unavailable at - {t_and_c_file}")
             if tc_list:
+                log.info(tc_list)
                 list_of_tc_keys = tc_list
         except Exception as e:
             log.exception(f"Exception while reading T&C file: {e}", e)
@@ -106,4 +108,5 @@ class DDSUtils:
     def get_t_and_c(self):
         global t_and_c_data
         log.info("Getting T&C....")
+        log.info(t_and_c_data)
         return t_and_c_data
