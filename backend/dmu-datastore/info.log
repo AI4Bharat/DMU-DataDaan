@@ -892,3 +892,12 @@ KeyError: 'HTTP_X_USER_ID'
 [2022-08-19 15:04:36,109] {userservice.py:70} Thread-4 INFO in userservice: Checking if the user session is active.....
 [2022-08-19 15:04:36,112] {ddsservice.py:139} Thread-4 INFO in ddsservice: Searching for User Uploads......
 [2022-08-19 15:04:36,112] {_internal.py:113} Thread-4 INFO in _internal: 127.0.0.1 - - [19/Aug/2022 15:04:36] "[37mPOST /dmu-datastore/data-upload-service/v1/upload/search HTTP/1.1[0m" 200 -
+[2022-08-22 11:32:25,471] {app.py:21} MainThread INFO in app: /Users/vishalmahuli/Desktop/dmu-dus/docs - Folder Exists!
+[2022-08-22 11:32:25,472] {ddsvalidator.py:22} MainThread INFO in ddsvalidator: Reading T&C from - /config/termsAndConditions.json
+[2022-08-22 11:32:25,479] {_internal.py:113} MainThread INFO in _internal:  * Running on http://localhost:5001/ (Press CTRL+C to quit)
+[2022-08-22 11:32:50,550] {app.py:21} MainThread INFO in app: /Users/vishalmahuli/Desktop/dmu-dus/docs - Folder Exists!
+[2022-08-22 11:32:50,550] {ddsvalidator.py:22} MainThread INFO in ddsvalidator: Reading T&C from - /termsAndConditions.json
+[2022-08-22 11:32:50,557] {_internal.py:113} MainThread INFO in _internal:  * Running on http://localhost:5001/ (Press CTRL+C to quit)
+[2022-08-22 11:37:21,575] {app.py:21} MainThread INFO in app: /Users/vishalmahuli/Desktop/dmu-dus/docs - Folder Exists!
+[2022-08-22 11:37:21,575] {ddsvalidator.py:22} MainThread INFO in ddsvalidator: Reading T&C from - /Users/vishalmahuli/Desktop/dmu-dus/DMU-DataDaan/backend/dmu-datastore/config/termsAndConditions.json
+[2022-08-22 11:37:21,578] {_internal.py:113} MainThread INFO in _internal:  * Running on http://localhost:5001/ (Press CTRL+C to quit)

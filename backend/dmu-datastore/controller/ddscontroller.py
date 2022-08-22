@@ -7,6 +7,7 @@ from config.ddsconfigs import context_path, x_key
 from service.userservice import UserService
 from service.ddsservice import DDSService
 from utils.ddsvalidator import DDSValidator
+from utils.ddsutils import DDSUtils
 from flask_cors import CORS, cross_origin
 
 dds_app = Flask(__name__)
@@ -177,6 +178,18 @@ def terms_accept():
             return jsonify(response), 200
         response = {"status": "Invalid Access", "message": "You're not authorised to access this resource"}
         return jsonify(response), 403
+    except Exception as e:
+        log.exception("Something went wrong: " + str(e), e)
+        return {"status": "FAILED", "message": "Something went wrong"}, 400
+
+
+# REST endpoint to search user uploads
+@dds_app.route(context_path + '/v1/terms/search', methods=["GET"])
+def terms_search():
+    utils = DDSUtils()
+    try:
+        response = utils.get_t_and_c()
+        return jsonify(response), 200
     except Exception as e:
         log.exception("Something went wrong: " + str(e), e)
         return {"status": "FAILED", "message": "Something went wrong"}, 400
