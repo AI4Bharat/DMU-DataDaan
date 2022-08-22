@@ -1,38 +1,15 @@
-import json
 import logging
-
-import requests
 
 from repository.ddsrepo import DDSRepo
 from service.ddsservice import DDSService
-from config.ddsconfigs import t_and_c_file
 
 log = logging.getLogger('file')
 dds_repo, dds_service = DDSRepo(), DDSService()
-list_of_tc_keys = []
 
 
 class DDSValidator:
     def __init__(self):
         pass
-
-    def fetch_tc_keys(self):
-        global list_of_tc_keys
-        tc_list = []
-        log.info(f"Reading T&C from - {t_and_c_file}")
-        response = json.loads(requests.get(t_and_c_file).text)
-        if response:
-            response = response["termsAndConditions"]
-            for k in response.keys():
-                val_list = response[k]
-                if val_list:
-                    for val in val_list:
-                        if val["active"]:
-                            tc_list.append(val["code"])
-        else:
-            log.info(f"T&C unavailable at - {t_and_c_file}")
-        if tc_list:
-            list_of_tc_keys = tc_list
 
     def validate_upload_req(self, api_request):
         try:

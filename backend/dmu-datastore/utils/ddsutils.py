@@ -1,3 +1,4 @@
+import json
 import time
 from re import sub
 
@@ -7,10 +8,12 @@ import logging
 from repository.ddsrepo import DDSRepo
 from azure.storage.blob import BlobServiceClient
 from config.ddsconfigs import azure_link_prefix, azure_connection_string, azure_container_name
+from config.ddsconfigs import t_and_c_file
 import os
 
 log = logging.getLogger('file')
 dds_repo = DDSRepo()
+list_of_tc_keys, t_and_c_data = [], {}
 
 
 class DDSUtils:
@@ -72,6 +75,34 @@ class DDSUtils:
             if "___metadata___" in file_path:
                 query = {"lastUpdatedTimestamp": eval(str(time.time()).replace('.', '')[0:13])}
             else:
-                query = {"uploadStatus": "Completed", "lastUpdatedTimestamp": eval(str(time.time()).replace('.', '')[0:13])}
+                query = {"uploadStatus": "Completed",
+                         "lastUpdatedTimestamp": eval(str(time.time()).replace('.', '')[0:13])}
             dds_repo.update_dds_metadata({"uploadId": upload_id}, query)
             os.remove(file_path)
+
+    def fetch_tc_keys(self):
+        global list_of_tc_keys
+        global t_and_c_data
+        tc_list = []
+        log.info(f"Reading T&C from - {t_and_c_file}")
+        try:
+            with open(t_and_c_file, 'r') as f:
+                t_and_c_data = json.load(f)
+            if t_and_c_data:
+                data = t_and_c_data["termsAndConditions"]
+                for k in data.keys():
+                    val_list = data[k]
+                    if val_list:
+                        for val in val_list:
+                            if val["active"]:
+                                tc_list.append(val["code"])
+            else:
+                log.info(f"T&C unavailable at - {t_and_c_file}")
+            if tc_list:
+                list_of_tc_keys = tc_list
+        except Exception as e:
+            log.exception(f"Exception while reading T&C file: {e}", e)
+
+    def get_t_and_c(self):
+        log.info("Getting T&C....")
+        return t_and_c_data
