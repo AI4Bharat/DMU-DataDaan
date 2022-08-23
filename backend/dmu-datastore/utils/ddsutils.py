@@ -88,7 +88,6 @@ class DDSUtils:
         try:
             with open(t_and_c_file, 'r') as f:
                 t_and_c_data = json.load(f)
-                log.info(t_and_c_data)
             if t_and_c_data:
                 data = t_and_c_data["termsAndConditions"]
                 for k in data.keys():
@@ -108,5 +107,4 @@ class DDSUtils:
     def get_t_and_c(self):
         global t_and_c_data
         global list_of_tc_keys
-        log.info("Getting T&C....")
         return t_and_c_data, list_of_tc_keys
