@@ -25,11 +25,13 @@ const UploadData = (props) => {
     message: "",
     variant: "success",
   });
+  const [tAndCData,setTAndCData] = useState({});
+
   const handleSnackbarClose = () => {
     setSnackbarInfo({ ...snackbar, open: false });
   };
 
-  const fetchTAndCData = ()=>{
+  const fetchTAndCData = async ()=>{
     const apiObj = new TermsAndConditions();
     fetch(apiObj.apiEndPoint(),{
       method:'get',
@@ -37,7 +39,11 @@ const UploadData = (props) => {
     }).then(async res=>{
       const rsp_data = await res.json();
       if(res.ok){
-        return rsp_data;
+        const {termsAndConditions:{
+          mainText,
+          specificPermissions
+        }} = rsp_data
+        setTAndCData({mainText,specificPermissions});
       }else{
         return Promise.reject(rsp_data)
       }
@@ -53,8 +59,7 @@ const UploadData = (props) => {
 
   useEffect(() => {
     const isAccepted = localStorage.getItem("isAccepted");
-    const response = fetchTAndCData();
-    console.log(response);
+    fetchTAndCData();
     setModal(!isAccepted);
   }, []);
 
@@ -85,15 +90,10 @@ const UploadData = (props) => {
   };
 
   const handleMetaFileChange = (files) => {
-    console.log("handleMetaFileChange", files);
-    // handleFileChange(files);
     setMeta(files);
   };
 
   const handleZipFileChange = (files) => {
-    console.log("handleZipFileChange", files);
-    //console.log("handleZipFileChange", files);
-    // handleFileChange(files);
     setZip(files);
   };
 
@@ -267,7 +267,7 @@ const UploadData = (props) => {
           </Button>
         </Grid>
       </Grid>
-      {modal && (
+      {modal && Object.keys(tAndCData).length && (
         <TermsAndConditionModal
           open={modal}
           isChecked={checkbox}
@@ -275,6 +275,7 @@ const UploadData = (props) => {
           handleClose={handleClose}
           handleAgree={handleAgree}
           handleCancel={handleCancel}
+          data={tAndCData}
         />
       )}
       {snackbar.open && (

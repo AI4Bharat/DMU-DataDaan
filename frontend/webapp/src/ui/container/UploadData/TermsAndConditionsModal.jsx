@@ -20,12 +20,19 @@ import Modal from "../../components/Modal";
 import GlobalStyles from "../../styles/Styles";
 
 const TermsAndConditionModal = ({ open, handleClose, ...props }) => {
-  const { classes, handleAgree, handleCancel, isChecked, toggleCheckbox } =
-    props;
+  const {
+    classes,
+    handleAgree,
+    handleCancel,
+    isChecked,
+    toggleCheckbox,
+    data,
+  } = props;
   const [radio, setRadio] = useState(null);
   const handleRadioBtnChange = (e) => {
     setRadio(e.target.name);
   };
+  const { mainText, specificPermissions } = data;
 
   return (
     <Modal
@@ -61,12 +68,34 @@ const TermsAndConditionModal = ({ open, handleClose, ...props }) => {
         >
           <Grid container spacing={1}>
             <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-              <span>{`Digital India Bhashini, the National Language Translation Mission, has been launched by the Hon’ble Prime Minister on 4.7.2022 with the vision of harnessing natural language technologies to create a diverse ecosystem of contributors, partnering entities and citizens for the purpose of transcending language barriers, thereby ensuring digital inclusion and digital empowerment in an Atma Nirbhar Bharat. To this end, the Mission aims to develop a public digital platform for making available open source artificial intelligence (AI) models through Application Programming Interfaces (APIs) in Indian languages and English, to enable speech-to-text conversion, text-to-text translation, text-to-speech conversion, transliteration and optical character recognition.\n\nDevelopment and efficacy of the AI models would depend critically on the availability of large and good quality language datasets in speech and text forms, particularly of the kind used for public purposes. To help augment the available datasets, the Hon’ble Prime Minister has also launched a crowdsourcing initiative through BhashaDaan portal on the Bhashini platform`}</span>{" "}
+              {/* <span>{`Digital India Bhashini, the National Language Translation Mission, has been launched by the Hon’ble Prime Minister on 4.7.2022 with the vision of harnessing natural language technologies to create a diverse ecosystem of contributors, partnering entities and citizens for the purpose of transcending language barriers, thereby ensuring digital inclusion and digital empowerment in an Atma Nirbhar Bharat. To this end, the Mission aims to develop a public digital platform for making available open source artificial intelligence (AI) models through Application Programming Interfaces (APIs) in Indian languages and English, to enable speech-to-text conversion, text-to-text translation, text-to-speech conversion, transliteration and optical character recognition.\n\nDevelopment and efficacy of the AI models would depend critically on the availability of large and good quality language datasets in speech and text forms, particularly of the kind used for public purposes. To help augment the available datasets, the Hon’ble Prime Minister has also launched a crowdsourcing initiative through BhashaDaan portal on the Bhashini platform`}</span>{" "}
               <Link href="https://bhashini.gov.in">Bhashini.</Link>
-              <span>{`\n\nYour organization has generated a large volume of digital multilingual content for public purposes, much of which is already in the public domain. Sharing of such content with Bhashini would go a long way in helping realize the vision of a language-barriers-free India.\n\nPlease upload the content you intend to share onto the portal as a zipped tar file and a README file. The zipped tar file should include all content such as (pdf, docx, pptx, mp3, wav, jpeg, png files).  The README file should contain the metadata with the directory structure of the tar file. In addition, metadata  should contain a short description, format, language, domain for content file. The DMU team of Bhashini is available to assist in the creation of this README file.\n\nPlease select one of the two following terms under which the content is being shared with Bhashini:\n\n`}</span>
+              <span>{`\n\nYour organization has generated a large volume of digital multilingual content for public purposes, much of which is already in the public domain. Sharing of such content with Bhashini would go a long way in helping realize the vision of a language-barriers-free India.\n\nPlease upload the content you intend to share onto the portal as a zipped tar file and a README file. The zipped tar file should include all content such as (pdf, docx, pptx, mp3, wav, jpeg, png files).  The README file should contain the metadata with the directory structure of the tar file. In addition, metadata  should contain a short description, format, language, domain for content file. The DMU team of Bhashini is available to assist in the creation of this README file.\n\nPlease select one of the two following terms under which the content is being shared with Bhashini:\n\n`}</span> */}
+              {mainText.length &&
+                mainText.map((text) => {
+                  if (text.active) return <span>{text.value}</span>;
+                })}
             </Grid>
             <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-              <input
+              {specificPermissions.length &&
+                specificPermissions.map((permission) => {
+                  if (permission.active) {
+                    return (
+                      <>
+                        <input
+                          id={permission.code}
+                          type="radio"
+                          name={permission.code}
+                          onChange={handleRadioBtnChange}
+                        />
+                        <label htmlFor={permission.code}>{permission.value}</label>
+                        <br />
+                        <br /> 
+                      </>
+                    );
+                  }
+                })}
+              {/* <input
                 id="radio1"
                 type="radio"
                 name="radio"
@@ -102,7 +131,7 @@ const TermsAndConditionModal = ({ open, handleClose, ...props }) => {
                 to the original contributors content. However, no public
                 datasets will be created from the content shared.
               </label>{" "}
-              <br />
+              <br /> */}
             </Grid>
           </Grid>
         </CardContent>
