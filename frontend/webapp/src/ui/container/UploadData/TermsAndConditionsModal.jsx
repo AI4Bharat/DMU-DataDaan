@@ -175,7 +175,7 @@ const TermsAndConditionModal = ({ open, handleClose, ...props }) => {
             >
               <Button
                 disabled={!isChecked}
-                onClick={handleAgree}
+                onClick={()=>handleAgree(radio,mainText.filter(text=>text.active)[0].code)}
                 color="primary"
                 variant="contained"
                 size="large"
