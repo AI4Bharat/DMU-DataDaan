@@ -8,11 +8,9 @@ import TermsAndConditionModal from "./TermsAndConditionsModal";
 import { useHistory } from "react-router-dom";
 import { useEffect } from "react";
 import FileUploadAPI from "../../../actions/apis/FileUpload/FileUpload";
-import config from "../../../configs/config";
-import apiendpoints from "../../../configs/apiendpoints";
-import Spinner from "../../components/Spinner";
 import Snackbar from "../../components/Snackbar";
 import LinearIndeterminate from "../../components/LinearProgress";
+import TermsAndConditions from "../../../actions/apis/TermsAndConditions/GetTermsAndConditions";
 
 const UploadData = (props) => {
   const { classes } = props;
@@ -31,9 +29,32 @@ const UploadData = (props) => {
     setSnackbarInfo({ ...snackbar, open: false });
   };
 
+  const fetchTAndCData = ()=>{
+    const apiObj = new TermsAndConditions();
+    fetch(apiObj.apiEndPoint(),{
+      method:'get',
+      headers: apiObj.getHeaders()
+    }).then(async res=>{
+      const rsp_data = await res.json();
+      if(res.ok){
+        return rsp_data;
+      }else{
+        return Promise.reject(rsp_data)
+      }
+    }).catch(err=>{
+      setSnackbarInfo({
+        ...snackbar,
+        open: true,
+        message: err.message,
+        variant: "error",
+      });
+    })
+  }
+
   useEffect(() => {
-    // setLoading(false);
     const isAccepted = localStorage.getItem("isAccepted");
+    const response = fetchTAndCData();
+    console.log(response);
     setModal(!isAccepted);
   }, []);
 
@@ -93,39 +114,40 @@ const UploadData = (props) => {
     setSnackbarInfo({
       ...snackbar,
       open: true,
-      message: "Upload in progress. Please wait, it can take several minutes depending on the size",
+      message:
+        "Upload in progress. Please wait, it can take several minutes depending on the size",
       variant: "info",
     });
     setLoading(true);
-    const apiObj = new FileUploadAPI(meta,zip)
+    const apiObj = new FileUploadAPI(meta, zip);
     fetch(apiObj.apiEndPoint(), {
       method: "post",
       body: apiObj.getFormData(),
       headers: apiObj.getHeaders().headers,
     })
-    .then(async res=>{
-      const rsp_data = await res.json();
-      if(res.ok){
+      .then(async (res) => {
+        const rsp_data = await res.json();
+        if (res.ok) {
+          setSnackbarInfo({
+            ...snackbar,
+            open: true,
+            message: rsp_data.message,
+            variant: "success",
+          });
+        } else {
+          return Promise.reject(rsp_data);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
         setSnackbarInfo({
           ...snackbar,
           open: true,
-          message: rsp_data.message,
-          variant: "success",
+          message: err.message,
+          variant: "error",
         });
-      }else{
-        return Promise.reject(rsp_data)
-      }
-      setLoading(false);
-    })
-    .catch((err) => {
-      setLoading(false);
-      setSnackbarInfo({
-        ...snackbar,
-        open: true,
-        message: err.message,
-        variant: "error",
       });
-    });
 
     // const apiendpoint = `${config.BASE_URL_AUTO}${apiendpoints.upload}`;
     // const {
@@ -160,9 +182,13 @@ const UploadData = (props) => {
 
   return (
     <>
-    {/* {loading && <Spinner />} */}
-    {loading && <LinearIndeterminate />}
-      <Grid container spacing={4} style={{marginTop:"80px", paddingRight:"150px" }}>
+      {/* {loading && <Spinner />} */}
+      {loading && <LinearIndeterminate />}
+      <Grid
+        container
+        spacing={4}
+        style={{ marginTop: "80px", paddingRight: "150px" }}
+      >
         <Grid
           item
           xs={6}
@@ -182,10 +208,10 @@ const UploadData = (props) => {
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <FileUpload
-            acceptedFiles={[".xlsx",".tsv", ".txt"]}
+            acceptedFiles={[".xlsx", ".tsv", ".txt"]}
             handleFileChange={handleMetaFileChange}
             handleFileDelete={clearFiles}
-            label={meta.length>0 ? meta[0].name: ""}
+            label={meta.length > 0 ? meta[0].name : ""}
           />
         </Grid>
         <Grid
@@ -204,7 +230,7 @@ const UploadData = (props) => {
             acceptedFiles={[".zip"]}
             handleFileChange={handleZipFileChange}
             handleFileDelete={clearFiles}
-            label={zip.length>0 ? zip[0].name:""}
+            label={zip.length > 0 ? zip[0].name : ""}
           />
         </Grid>
       </Grid>

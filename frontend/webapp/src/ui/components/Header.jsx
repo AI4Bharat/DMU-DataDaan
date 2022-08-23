@@ -14,6 +14,7 @@ import { translate } from "../../assets/localisation";
 import Theme from "../theme/theme-default";
 import Avatar from "@material-ui/core/Avatar";
 import bhashiniLogo from "../../assets/Bhashini_en.svg";
+import DatadaanLogo from "../../assets/DataDaan.svg";
 import { useHistory } from "react-router-dom";
 import DownIcon from "@material-ui/icons/ArrowDropDown";
 import { useState } from "react";
@@ -64,7 +65,14 @@ const Header = (props) => {
                 alt="Bhashini Logo"
               />
             </Link>
-          <Typography variant="h4">{translate("label.dmuDataDaan")}</Typography>
+            <a><span style={{fontWeight:'bolder',fontSize:'1.75rem'}}>Data</span><span style={{fontWeight:'bolder',color:'#ffcc35',marginLeft: "3px",fontSize:'1.75rem'}}>Daan</span></a>
+          {/* <Typography variant="h4">{translate("label.dmuDataDaan")}</Typography> */}
+          {/* <img
+                className={classes.bhashiniLogo}
+                src={DatadaanLogo}
+                alt="Datadaan Logo"
+              /> */}
+
           <div className={classes.profile}>
             <Button
               onClick={(e) => handleLogoutOption(e)}
