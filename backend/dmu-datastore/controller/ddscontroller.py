@@ -66,10 +66,13 @@ def logout():
 # REST endpoint for signup - protected access.
 @dds_app.route(context_path + '/v1/signup', methods=["POST"])
 def signup():
-    user_service = UserService()
+    dds_service, user_service, validator = DDSService(), UserService(), DDSValidator()
     data = request.get_json()
     data = add_headers(data, request, "userId")
     try:
+        validated = validator.validate_signup(data)
+        if validated:
+            return jsonify(validated), 400
         response = user_service.signup(data)
         return jsonify(response), 200
     except Exception as e:
