@@ -23,7 +23,9 @@ class DDSValidator:
     def validate_signup(self, user_signup_req):
         try:
             log.info("Validating the Signup request.........")
-            self.validate_x_key(user_signup_req)
+            x_key_valid = self.validate_x_key(user_signup_req)
+            if x_key_valid:
+                return x_key_valid
             if 'email' not in user_signup_req.keys():
                 return {"status": "VALIDATION_FAILED", "message": "email is mandatory!"}
             if 'password' not in user_signup_req.keys():
@@ -87,7 +89,9 @@ class DDSValidator:
     def validate_tc_del_req(self, tc_del_req):
         try:
             log.info("Validating the TC Delete request.........")
-            self.validate_x_key(tc_del_req)
+            x_key_valid = self.validate_x_key(tc_del_req)
+            if x_key_valid:
+                return x_key_valid
         except Exception as e:
             log.exception(f"Exception in upload validation: {e}", e)
             return {"status": "VALIDATION_FAILED", "message": "mandatory fields missing."}
@@ -95,7 +99,9 @@ class DDSValidator:
     def validate_users_del(self, users_del_req):
         try:
             log.info("Validating the Users Delete request.........")
-            self.validate_x_key(users_del_req)
+            x_key_valid = self.validate_x_key(users_del_req)
+            if x_key_valid:
+                return x_key_valid
             if 'username' not in users_del_req.keys():
                 return {"status": "VALIDATION_FAILED", "message": "username is mandatory!"}
         except Exception as e:

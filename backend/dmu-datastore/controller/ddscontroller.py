@@ -233,8 +233,7 @@ def add_headers(data, api_request, user_id):
     }
     api_headers = dict(api_request.headers)
     if 'X-Key' in api_headers.keys():
-        if api_headers['X-Key'] == x_key:
-            headers["xKey"] = api_headers['X-Key']
+        headers["xKey"] = api_headers['X-Key']
     if 'X-Token' in api_headers.keys():
         headers["token"] = api_headers['X-Token']
     data["metadata"] = headers
