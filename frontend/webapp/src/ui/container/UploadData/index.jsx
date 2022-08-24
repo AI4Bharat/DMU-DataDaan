@@ -11,6 +11,7 @@ import FileUploadAPI from "../../../actions/apis/FileUpload/FileUpload";
 import Snackbar from "../../components/Snackbar";
 import LinearIndeterminate from "../../components/LinearProgress";
 import TermsAndConditions from "../../../actions/apis/TermsAndConditions/GetTermsAndConditions";
+import AcceptTermsAndConditions from "../../../actions/apis/TermsAndConditions/AcceptTermsAndConditions";
 
 const UploadData = (props) => {
   const { classes } = props;
@@ -25,37 +26,47 @@ const UploadData = (props) => {
     message: "",
     variant: "success",
   });
+  const [tAndCData, setTAndCData] = useState({});
+
   const handleSnackbarClose = () => {
     setSnackbarInfo({ ...snackbar, open: false });
   };
 
-  const fetchTAndCData = ()=>{
+  const fetchTAndCData = async () => {
     const apiObj = new TermsAndConditions();
-    fetch(apiObj.apiEndPoint(),{
-      method:'get',
-      headers: apiObj.getHeaders()
-    }).then(async res=>{
-      const rsp_data = await res.json();
-      if(res.ok){
-        return rsp_data;
-      }else{
-        return Promise.reject(rsp_data)
-      }
-    }).catch(err=>{
-      setSnackbarInfo({
-        ...snackbar,
-        open: true,
-        message: err.message,
-        variant: "error",
-      });
+    fetch(apiObj.apiEndPoint(), {
+      method: "get",
+      headers: apiObj.getHeaders(),
     })
-  }
+      .then(async (res) => {
+        const rsp_data = await res.json();
+        if (res.ok) {
+          const {
+            termsAndConditions: { mainText, specificPermissions },
+          } = rsp_data;
+          setTAndCData({ mainText, specificPermissions });
+        } else {
+          return Promise.reject(rsp_data);
+        }
+      })
+      .catch((err) => {
+        setSnackbarInfo({
+          ...snackbar,
+          open: true,
+          message: err.message,
+          variant: "error",
+        });
+      });
+  };
 
   useEffect(() => {
-    const isAccepted = localStorage.getItem("isAccepted");
-    const response = fetchTAndCData();
-    console.log(response);
-    setModal(!isAccepted);
+    const {
+      user: { termsAndConditions },
+    } = JSON.parse(localStorage.getItem("userInfo"));
+    if (termsAndConditions === undefined) {
+      fetchTAndCData();
+      setModal(true);
+    }
   }, []);
 
   const handleClose = () => {
@@ -66,9 +77,45 @@ const UploadData = (props) => {
     history.push(`${process.env.PUBLIC_URL}/`);
   };
 
-  const handleAgree = () => {
-    localStorage.setItem("isAccepted", true);
-    handleClose();
+  const acceptTermsAndConditions = (permission, termsAndConditions) => {
+    const apiObj = new AcceptTermsAndConditions(termsAndConditions, permission);
+    fetch(apiObj.apiEndPoint(), {
+      method: "POST",
+      body: JSON.stringify(apiObj.getBody()),
+      headers: apiObj.getHeaders().headers,
+    })
+      .then(async (res) => {
+        const rsp_data = await res.json();
+        if (res.ok) {
+          localStorage.setItem("isAccepted", true);
+          setSnackbarInfo({
+            ...snackbar,
+            open: true,
+            message: rsp_data.message,
+            variant: "success",
+          });
+          handleClose();
+        } else {
+          return Promise.reject(rsp_data);
+        }
+      })
+      .catch((err) => {
+        handleClose();
+        setSnackbarInfo({
+          ...snackbar,
+          open: true,
+          message: err.message,
+          variant: "error",
+        });
+        setTimeout(() => {
+          localStorage.clear();
+          history.push(`${process.env.PUBLIC_URL}/`);
+        }, [3000]);
+      });
+  };
+
+  const handleAgree = (permission, termsAndConditions) => {
+    acceptTermsAndConditions(permission, termsAndConditions);
   };
 
   const handleCheckboxChange = (event) => {
@@ -85,15 +132,10 @@ const UploadData = (props) => {
   };
 
   const handleMetaFileChange = (files) => {
-    console.log("handleMetaFileChange", files);
-    // handleFileChange(files);
     setMeta(files);
   };
 
   const handleZipFileChange = (files) => {
-    console.log("handleZipFileChange", files);
-    //console.log("handleZipFileChange", files);
-    // handleFileChange(files);
     setZip(files);
   };
 
@@ -267,7 +309,7 @@ const UploadData = (props) => {
           </Button>
         </Grid>
       </Grid>
-      {modal && (
+      {modal && Object.keys(tAndCData).length && (
         <TermsAndConditionModal
           open={modal}
           isChecked={checkbox}
@@ -275,6 +317,7 @@ const UploadData = (props) => {
           handleClose={handleClose}
           handleAgree={handleAgree}
           handleCancel={handleCancel}
+          data={tAndCData}
         />
       )}
       {snackbar.open && (
