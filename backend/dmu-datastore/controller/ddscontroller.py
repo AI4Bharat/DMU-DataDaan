@@ -80,13 +80,16 @@ def signup():
 # REST endpoint for delete users - protected access.
 @dds_app.route(context_path + '/v1/users/delete', methods=["POST"])
 def delete_users():
-    user_service = UserService()
+    dds_service, user_service, validator = DDSService(), UserService(), DDSValidator()
     data = request.get_json()
     data = add_headers(data, request, "userId")
     try:
         user_id = user_service.is_session_active(data["metadata"]["token"])
         if user_id:
             data = add_headers(data, request, user_id)
+            validation_res = validator.validate_users_del(data)
+            if validation_res:
+                return jsonify(validation_res), 400
             response = user_service.delete_user(data)
             return jsonify(response), 200
         response = {"status": "Invalid Access", "message": "You're not authorised to access this resource"}
@@ -190,6 +193,28 @@ def terms_search():
     try:
         response = utils.get_t_and_c()[0]
         return jsonify(response), 200
+    except Exception as e:
+        log.exception("Something went wrong: " + str(e), e)
+        return {"status": "FAILED", "message": "Something went wrong"}, 400
+
+
+# REST endpoint to search user uploads
+@dds_app.route(context_path + '/v1/terms/delete', methods=["GET"])
+def terms_delete():
+    user_service, validator = UserService(), DDSValidator()
+    data = request.get_json()
+    data = add_headers(data, request, "userId")
+    try:
+        user_id = user_service.is_session_active(data["metadata"]["token"])
+        if user_id:
+            data = add_headers(data, request, user_id)
+            validation_res = validator.validate_tc_del_req(data)
+            if validation_res:
+                return jsonify(validation_res), 400
+            response = user_service.del_tc_user(data)
+            return jsonify(response), 200
+        response = {"status": "Invalid Access", "message": "You're not authorised to access this resource"}
+        return jsonify(response), 403
     except Exception as e:
         log.exception("Something went wrong: " + str(e), e)
         return {"status": "FAILED", "message": "Something went wrong"}, 400

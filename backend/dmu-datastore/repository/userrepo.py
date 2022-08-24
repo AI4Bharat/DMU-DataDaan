@@ -77,3 +77,8 @@ class UserRepo:
         col = self.get_session_connection()
         deleted = col.delete_many(query)
         return deleted.deleted_count
+
+    def delete_a_key(self, query, key):
+        col = self.get_user_connection()
+        updated = col.update(query, {"$unset": {key: 1}}, False, True)
+        return updated

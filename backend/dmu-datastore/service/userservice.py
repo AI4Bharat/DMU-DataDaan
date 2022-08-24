@@ -16,8 +16,6 @@ class UserService:
         pass
 
     def signup(self, user_signup_req):
-        if "xKey" not in user_signup_req["metadata"].keys():
-            return {"status": "Invalid Access", "message": "Signup Request Failed!"}
         log.info("Signing Up...")
         query = {"username": user_signup_req["email"]}
         users = user_repo.search_users(query, {'_id': False}, None, None)
@@ -32,8 +30,6 @@ class UserService:
         return {"status": "Success", "message": "User created Successfully"}
 
     def delete_user(self, user_delete_req):
-        if "xKey" not in user_delete_req["metadata"].keys():
-            return {"status": "Invalid Access", "message": "Delete Request Failed!"}
         log.info("Deleting User...")
         query = {"username": user_delete_req["username"]}
         users = user_repo.search_users(query, {'_id': False}, None, None)
@@ -111,4 +107,14 @@ class UserService:
                 return {"status": "Success", "message": "T&C acceptance recorded!"}
         except Exception as e:
             log.exception(f"Exception while logging in: {e}", e)
+            return None
+
+    def del_tc_user(self, data):
+        log.info("Deleting T&C...")
+        try:
+            user_id = data["metadata"]["userId"]
+            user_repo.delete_a_key({"userId": user_id}, "termsAndConditions")
+            return {"status": "Success", "message": "T&C deleted!"}
+        except Exception as e:
+            log.exception(f"Exception while Deleting TC for User in: {e}", e)
             return None
