@@ -8,11 +8,10 @@ import TermsAndConditionModal from "./TermsAndConditionsModal";
 import { useHistory } from "react-router-dom";
 import { useEffect } from "react";
 import FileUploadAPI from "../../../actions/apis/FileUpload/FileUpload";
-import config from "../../../configs/config";
-import apiendpoints from "../../../configs/apiendpoints";
-import Spinner from "../../components/Spinner";
 import Snackbar from "../../components/Snackbar";
 import LinearIndeterminate from "../../components/LinearProgress";
+import TermsAndConditions from "../../../actions/apis/TermsAndConditions/GetTermsAndConditions";
+import AcceptTermsAndConditions from "../../../actions/apis/TermsAndConditions/AcceptTermsAndConditions";
 
 const UploadData = (props) => {
   const { classes } = props;
@@ -27,14 +26,47 @@ const UploadData = (props) => {
     message: "",
     variant: "success",
   });
+  const [tAndCData, setTAndCData] = useState({});
+
   const handleSnackbarClose = () => {
     setSnackbarInfo({ ...snackbar, open: false });
   };
 
+  const fetchTAndCData = async () => {
+    const apiObj = new TermsAndConditions();
+    fetch(apiObj.apiEndPoint(), {
+      method: "get",
+      headers: apiObj.getHeaders(),
+    })
+      .then(async (res) => {
+        const rsp_data = await res.json();
+        if (res.ok) {
+          const {
+            termsAndConditions: { mainText, specificPermissions },
+          } = rsp_data;
+          setTAndCData({ mainText, specificPermissions });
+        } else {
+          return Promise.reject(rsp_data);
+        }
+      })
+      .catch((err) => {
+        setSnackbarInfo({
+          ...snackbar,
+          open: true,
+          message: err.message,
+          variant: "error",
+        });
+      });
+  };
+
   useEffect(() => {
-    // setLoading(false);
-    const isAccepted = localStorage.getItem("isAccepted");
-    setModal(!isAccepted);
+    const {
+      user: { termsAndConditions },
+    } = JSON.parse(localStorage.getItem("userInfo"));
+    if (termsAndConditions === undefined) {
+      fetchTAndCData();
+      setModal(true);
+    }
   }, []);
 
   const handleClose = () => {
@@ -45,9 +77,45 @@ const UploadData = (props) => {
     history.push(`${process.env.PUBLIC_URL}/`);
   };
 
-  const handleAgree = () => {
-    localStorage.setItem("isAccepted", true);
-    handleClose();
+  const acceptTermsAndConditions = (permission, termsAndConditions) => {
+    const apiObj = new AcceptTermsAndConditions(termsAndConditions, permission);
+    fetch(apiObj.apiEndPoint(), {
+      method: "POST",
+      body: JSON.stringify(apiObj.getBody()),
+      headers: apiObj.getHeaders().headers,
+    })
+      .then(async (res) => {
+        const rsp_data = await res.json();
+        if (res.ok) {
+          localStorage.setItem("isAccepted", true);
+          setSnackbarInfo({
+            ...snackbar,
+            open: true,
+            message: rsp_data.message,
+            variant: "success",
+          });
+          handleClose();
+        } else {
+          return Promise.reject(rsp_data);
+        }
+      })
+      .catch((err) => {
+        handleClose();
+        setSnackbarInfo({
+          ...snackbar,
+          open: true,
+          message: err.message,
+          variant: "error",
+        });
+        setTimeout(() => {
+          localStorage.clear();
+          history.push(`${process.env.PUBLIC_URL}/`);
+        }, [3000]);
+      });
+  };
+
+  const handleAgree = (permission, termsAndConditions) => {
+    acceptTermsAndConditions(permission, termsAndConditions);
   };
 
   const handleCheckboxChange = (event) => {
@@ -64,15 +132,10 @@ const UploadData = (props) => {
   };
 
   const handleMetaFileChange = (files) => {
-    console.log("handleMetaFileChange", files);
-    // handleFileChange(files);
     setMeta(files);
   };
 
   const handleZipFileChange = (files) => {
-    console.log("handleZipFileChange", files);
-    //console.log("handleZipFileChange", files);
-    // handleFileChange(files);
     setZip(files);
   };
 
@@ -93,39 +156,40 @@ const UploadData = (props) => {
     setSnackbarInfo({
       ...snackbar,
       open: true,
-      message: "Upload in progress. Please wait, it can take several minutes depending on the size",
+      message:
+        "Upload in progress. Please wait, it can take several minutes depending on the size",
       variant: "info",
     });
     setLoading(true);
-    const apiObj = new FileUploadAPI(meta,zip)
+    const apiObj = new FileUploadAPI(meta, zip);
     fetch(apiObj.apiEndPoint(), {
       method: "post",
       body: apiObj.getFormData(),
       headers: apiObj.getHeaders().headers,
     })
-    .then(async res=>{
-      const rsp_data = await res.json();
-      if(res.ok){
+      .then(async (res) => {
+        const rsp_data = await res.json();
+        if (res.ok) {
+          setSnackbarInfo({
+            ...snackbar,
+            open: true,
+            message: rsp_data.message,
+            variant: "success",
+          });
+        } else {
+          return Promise.reject(rsp_data);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
         setSnackbarInfo({
           ...snackbar,
           open: true,
-          message: rsp_data.message,
-          variant: "success",
+          message: err.message,
+          variant: "error",
         });
-      }else{
-        return Promise.reject(rsp_data)
-      }
-      setLoading(false);
-    })
-    .catch((err) => {
-      setLoading(false);
-      setSnackbarInfo({
-        ...snackbar,
-        open: true,
-        message: err.message,
-        variant: "error",
       });
-    });
 
     // const apiendpoint = `${config.BASE_URL_AUTO}${apiendpoints.upload}`;
     // const {
@@ -160,9 +224,13 @@ const UploadData = (props) => {
 
   return (
     <>
-    {/* {loading && <Spinner />} */}
-    {loading && <LinearIndeterminate />}
-      <Grid container spacing={4} style={{marginTop:"80px", paddingRight:"150px" }}>
+      {/* {loading && <Spinner />} */}
+      {loading && <LinearIndeterminate />}
+      <Grid
+        container
+        spacing={4}
+        style={{ marginTop: "80px", paddingRight: "150px" }}
+      >
         <Grid
           item
           xs={6}
@@ -185,7 +253,7 @@ const UploadData = (props) => {
             acceptedFiles={[".txt"]}
             handleFileChange={handleMetaFileChange}
             handleFileDelete={clearFiles}
-            label={meta.length>0 ? meta[0].name: ""}
+            label={meta.length > 0 ? meta[0].name : ""}
           />
         </Grid>
         <Grid
@@ -204,7 +272,7 @@ const UploadData = (props) => {
             acceptedFiles={[".zip"]}
             handleFileChange={handleZipFileChange}
             handleFileDelete={clearFiles}
-            label={zip.length>0 ? zip[0].name:""}
+            label={zip.length > 0 ? zip[0].name : ""}
           />
         </Grid>
       </Grid>
@@ -241,7 +309,7 @@ const UploadData = (props) => {
           </Button>
         </Grid>
       </Grid>
-      {modal && (
+      {modal && Object.keys(tAndCData).length && (
         <TermsAndConditionModal
           open={modal}
           isChecked={checkbox}
@@ -249,6 +317,7 @@ const UploadData = (props) => {
           handleClose={handleClose}
           handleAgree={handleAgree}
           handleCancel={handleCancel}
+          data={tAndCData}
         />
       )}
       {snackbar.open && (
