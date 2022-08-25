@@ -8,6 +8,7 @@ import {
   Menu,
   MenuItem,
   Button,
+  Divider,
 } from "@material-ui/core";
 import HeaderStyles from "../styles/HeaderStyles";
 import { translate } from "../../assets/localisation";
@@ -18,6 +19,7 @@ import DatadaanLogo from "../../assets/DataDaan.svg";
 import { useHistory } from "react-router-dom";
 import DownIcon from "@material-ui/icons/ArrowDropDown";
 import { useState } from "react";
+import DataDaan from "../../assets/DataDaan.png";
 
 const StyledMenu = withStyles({
   paper: {
@@ -58,14 +60,22 @@ const Header = (props) => {
     <MuiThemeProvider theme={Theme}>
       <AppBar color="inherit" position="static">
         <Toolbar className={classes.toolbar}>
-        <Link href="https://bhashini.gov.in/en/">
+          <Link href="https://bhashini.gov.in/en/">
               <img
                 className={classes.bhashiniLogo}
                 src={bhashiniLogo}
                 alt="Bhashini Logo"
               />
-            </Link>
-            <a><span style={{fontWeight:'bolder',fontSize:'1.75rem'}}>Data</span><span style={{fontWeight:'bolder',color:'#ffcc35',marginLeft: "3px",fontSize:'1.75rem'}}>Daan</span></a>
+          </Link>
+          <Divider orientation="vertical" variant="middle" flexItem className={classes.logoDivider}/>
+          <Link href="https://bhashini.gov.in/en/">
+              <img
+                className={`${classes.DataDaanLogo} ${classes.bhashiniLogo}`}
+                src={DataDaan}
+                alt="DataDaan Logo"
+              />
+          </Link>
+            {/* <a><span style={{fontWeight:'bolder',fontSize:'1.75rem'}}>Data</span><span style={{fontWeight:'bolder',color:'#ffcc35',marginLeft: "3px",fontSize:'1.75rem'}}>Daan</span></a> */}
           {/* <Typography variant="h4">{translate("label.dmuDataDaan")}</Typography> */}
           {/* <img
                 className={classes.bhashiniLogo}

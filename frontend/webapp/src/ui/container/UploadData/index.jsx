@@ -1,4 +1,4 @@
-import { Button, Link } from "@material-ui/core";
+import { Box, Button, Divider, Link } from "@material-ui/core";
 import { withStyles } from "@material-ui/core";
 import { Grid, Typography } from "@material-ui/core";
 import { useState } from "react";
@@ -226,89 +226,63 @@ const UploadData = (props) => {
     <>
       {/* {loading && <Spinner />} */}
       {loading && <LinearIndeterminate />}
-      <Grid
-        container
-        spacing={4}
-        style={{ marginTop: "80px", paddingRight: "150px" }}
-      >
-        <Grid
-          item
-          xs={6}
-          sm={6}
-          md={6}
-          lg={6}
-          xl={6}
-          className={classes.flexCenter}
-        >
-          <Typography>README.txt</Typography>
-          {/* <Link
-            className={classes.flexCenter}
-            href="https://docs.google.com/spreadsheets/d/1jo9Pr2rbg_gph78pbM-0oXdxRrA4RaKRSZGNDRn7E4k/export?format=xlsx"
+      <Box className={classes.flexBox}>
+        <Box className={classes.parentBox}>
+          <Box
+            style={{
+              alignSelf: "center",
+            }}
           >
-            (Format available here)
-          </Link> */}
-        </Grid>
-        <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-          <FileUpload
-            acceptedFiles={[".txt"]}
-            handleFileChange={handleMetaFileChange}
-            handleFileDelete={clearFiles}
-            label={meta.length > 0 ? meta[0].name : ""}
-          />
-        </Grid>
-        <Grid
-          item
-          xs={6}
-          sm={6}
-          md={6}
-          lg={6}
-          xl={6}
-          className={classes.flexCenter}
-        >
-          <Typography>Media Files zip</Typography>
-        </Grid>
-        <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-          <FileUpload
-            acceptedFiles={[".zip"]}
-            handleFileChange={handleZipFileChange}
-            handleFileDelete={clearFiles}
-            label={zip.length > 0 ? zip[0].name : ""}
-          />
-        </Grid>
-      </Grid>
-      <Grid container spacing={4} style={{ paddingTop: "15px" }}>
-        <Grid
-          item
-          xs={7}
-          sm={7}
-          md={7}
-          lg={7}
-          xl={7}
-          className={classes.flexEnd}
-        >
-          {/* <Button size="large" color="primary" variant="contained" onClick={clearFiles}>
-            Clear
-          </Button> */}
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          sm={12}
-          md={12}
-          lg={12}
-          xl={12}
-          className={classes.flexCenter}
-        >
-          <Button
-            size="large"
-            color="primary"
-            variant="contained"
-            onClick={handleSubmit}
-          >
-            Submit
-          </Button>
-        </Grid>
-      </Grid>
+            <Typography>How to submit the files</Typography>
+            <ul>
+              <li>Make sure the names of text file and zip file are same.</li>
+              <li>Max supported zip file size is 5 GB.</li>
+            </ul>
+          </Box>
+          <Divider orientation="vertical" variant="middle" flexItem />
+          <Box style={{ width: "55%" }}>
+            <Box className={`${classes.parentBox} ${classes.innerBox}`}>
+              <Typography style={{ marginRight: "auto" }}>
+                README.txt
+              </Typography>
+              <FileUpload
+                acceptedFiles={[".txt"]}
+                handleFileChange={handleMetaFileChange}
+                handleFileDelete={clearFiles}
+                label={meta.length > 0 ? meta[0].name : ""}
+                style={{ width: "65%" }}
+              />
+            </Box>
+            <Box
+              className={`${classes.parentBox}  ${classes.innerBox}`}
+              style={{
+                marginTop: "35px",
+              }}
+            >
+              <Typography style={{ marginRight: "auto" }}>
+                Media Files zip
+              </Typography>
+              <FileUpload
+                acceptedFiles={[".zip"]}
+                handleFileChange={handleZipFileChange}
+                handleFileDelete={clearFiles}
+                label={zip.length > 0 ? zip[0].name : ""}
+                style={{ width: "65%" }}
+              />
+            </Box>
+            <Button
+              size="large"
+              variant="contained"
+              color="primary"
+              onClick={handleSubmit}
+              className={classes.submitBtn}
+            >
+              Submit
+            </Button>
+          </Box>
+        </Box>
+      </Box>
+
       {modal && Object.keys(tAndCData).length && (
         <TermsAndConditionModal
           open={modal}

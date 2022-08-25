@@ -81,6 +81,31 @@ const GlobalStyles = (theme) => ({
     right: "15px",
     top: "5px",
   },
+
+  flexBox: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    minHeight: "80vh",
+  },
+  
+  parentBox: {
+    display: "flex",
+    justifyContent: "space-around",
+    flexDirection: "row",
+  }, 
+
+  innerBox: {
+    alignItems: "center", 
+    justifyContent: "flex-start" 
+  },
+
+  submitBtn: {
+    display: "block",
+    width: "75%",
+    marginTop: "10%",
+    marginLeft: "5%",
+  }
 });
 
 export default GlobalStyles;
