@@ -3,6 +3,7 @@ import LoginStyles from "../../styles/Login";
 import { useHistory } from "react-router-dom";
 import { translate } from "../../../assets/localisation";
 import bhashiniLogo from "../../../assets/Bhashini_en.svg";
+import LoginLogo from "../../../assets/LoginLogo.png";
 
 function AppInfo(props) {
   const { classes } = props;
@@ -17,14 +18,15 @@ function AppInfo(props) {
       color={"primary"}
       className={classes.appInfo}
     >
-      {/* <Link href="https://bhashini.gov.in/en/">
-              <img
-                className={classes.logo}
-                src={bhashiniLogo}
-                alt="Bhashini Logo"
-              />
-            </Link> */}
-      <Typography
+      <Link href="https://bhashini.gov.in/en/">
+        <img
+          className={classes.logo}
+          src={LoginLogo}
+          alt="Logo"
+        />
+      </Link>
+      
+      {/* <Typography
         className={classes.title}
         variant={"h2"}
         onClick={() => {
@@ -32,7 +34,7 @@ function AppInfo(props) {
         }}
       >
         {translate("label.dmuDataDaan")}
-      </Typography>
+      </Typography> */}
       <Hidden only="xs">
         <Typography variant={"body1"} className={classes.body}>
           {translate("label.dmuDataDaanInfo")}
