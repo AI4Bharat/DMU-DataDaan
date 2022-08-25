@@ -14,7 +14,7 @@ const FileUpload = (props) => {
   const { classes, acceptedFiles, handleFileChange,label,error } = props;
 
   return (
-    <div ondrop={handleFileChange}>
+    <div ondrop={handleFileChange} style={{width: "70%"}}>
       <TextField
         fullWidth
         color="primary"

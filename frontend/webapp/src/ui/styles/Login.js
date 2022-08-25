@@ -1,7 +1,11 @@
 const LoginStyle = (theme) => ({
     appInfo: {
+      display: "flex",
+      justifyContent: "center",
+      flexDirection: "column",
       background: "rgba(44, 39, 153, 1)",
       minHeight: "100vh",
+      verticalAlign: "middle",
       color: theme.palette.primary.contrastText,
       "@media (max-width:650px)": {
         background: "white",
@@ -166,6 +170,7 @@ const LoginStyle = (theme) => ({
     logo: {
       paddingTop:"30px",
       paddingLeft:"40px",
+      width: "85%",
     },
   
     subText: {
