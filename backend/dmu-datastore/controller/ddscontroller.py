@@ -112,7 +112,7 @@ def doc_upload():
         user_id = user_service.is_session_active(data["metadata"]["token"])
         if user_id:
             data = add_headers(data, request, user_id)
-            validation_res = validator.validate_upload_req(request)
+            validation_res = validator.validate_upload_req(request, data)
             if validation_res:
                 return jsonify(validation_res), 400
             response = dds_service.upload(request, data)
@@ -167,6 +167,7 @@ def doc_delete():
         return {"status": "FAILED", "message": "Something went wrong"}, 400
 
 
+'''
 # REST endpoint to search user uploads
 @dds_app.route(context_path + '/v1/terms/accept', methods=["POST"])
 def terms_accept():
@@ -187,6 +188,7 @@ def terms_accept():
     except Exception as e:
         log.exception("Something went wrong: " + str(e), e)
         return {"status": "FAILED", "message": "Something went wrong"}, 400
+'''
 
 
 # REST endpoint to search user uploads
@@ -201,6 +203,7 @@ def terms_search():
         return {"status": "FAILED", "message": "Something went wrong"}, 400
 
 
+'''
 # REST endpoint to search user uploads
 @dds_app.route(context_path + '/v1/terms/delete', methods=["GET"])
 def terms_delete():
@@ -221,6 +224,7 @@ def terms_delete():
     except Exception as e:
         log.exception("Something went wrong: " + str(e), e)
         return {"status": "FAILED", "message": "Something went wrong"}, 400
+'''
 
 
 # Fetches required headers from the request and adds it to the body.

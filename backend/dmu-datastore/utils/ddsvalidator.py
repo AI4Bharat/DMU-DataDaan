@@ -34,7 +34,7 @@ class DDSValidator:
             log.exception(f"Exception in upload validation: {e}", e)
             return {"status": "VALIDATION_FAILED", "message": "mandatory fields missing."}
 
-    def validate_upload_req(self, api_request):
+    def validate_upload_req(self, api_request, data):
         try:
             if dds_service.is_system_busy():
                 return {"status": "FAILED", "message": "The System is currently busy, please try after sometime."}
@@ -44,6 +44,11 @@ class DDSValidator:
                 return {"status": "VALIDATION_FAILED", "message": "zipFile is mandatory!"}
             if 'metadata' not in files.keys():
                 return {"status": "VALIDATION_FAILED", "message": "metadata is mandatory!"}
+            if "agreement" not in data.keys():
+                return {"status": "VALIDATION_FAILED", "message": "agreement is mandatory!"}
+            response = self.validate_terms_and_cond(data["agreement"])
+            if response:
+                return response
             return None
         except Exception as e:
             log.exception(f"Exception in upload validation: {e}", e)
@@ -81,7 +86,11 @@ class DDSValidator:
             if 'permission' not in data.keys():
                 return {"status": "VALIDATION_FAILED", "message": "permission is mandatory!"}
             if data["permission"] not in list_of_tc_keys:
-                return {"status": "VALIDATION_FAILED", "message": "permission is invalid!"}
+                return {"status": "VALIDATION_FAILED", "message": "permission is invalid!"},
+            if 'acceptance' not in data.keys():
+                return {"status": "VALIDATION_FAILED", "message": "acceptance is mandatory!"}
+            if data["acceptance"] not in list_of_tc_keys:
+                return {"status": "VALIDATION_FAILED", "message": "acceptance is invalid!"}
         except Exception as e:
             log.exception(f"Exception in login validation: {e}", e)
             return {"status": "VALIDATION_FAILED", "message": "mandatory fields missing."}

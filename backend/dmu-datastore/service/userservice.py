@@ -91,7 +91,7 @@ class UserService:
         except Exception as e:
             log.exception(f"Exception while logging in: {e}", e)
             return None
-
+    '''
     def add_tc_to_user(self, data):
         log.info("Updating T&C...")
         try:
@@ -108,7 +108,9 @@ class UserService:
         except Exception as e:
             log.exception(f"Exception while logging in: {e}", e)
             return None
+    '''
 
+    '''
     def del_tc_user(self, data):
         log.info("Deleting T&C...")
         try:
@@ -118,3 +120,4 @@ class UserService:
         except Exception as e:
             log.exception(f"Exception while Deleting TC for User in: {e}", e)
             return None
+    '''

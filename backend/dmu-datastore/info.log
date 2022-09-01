@@ -966,3 +966,7 @@ KeyError: 'HTTP_X_USER_ID'
 [2022-08-24 10:38:38,975] {ddsvalidator.py:74} Thread-3 INFO in ddsvalidator: Validating the T&C request.........
 [2022-08-24 10:38:38,975] {userservice.py:96} Thread-3 INFO in userservice: Updating T&C...
 [2022-08-24 10:38:38,976] {_internal.py:113} Thread-3 INFO in _internal: 127.0.0.1 - - [24/Aug/2022 10:38:38] "[37mPOST /dmu-datastore/data-upload-service/v1/terms/accept HTTP/1.1[0m" 200 -
+[2022-09-01 18:19:36,057] {app.py:21} MainThread INFO in app: /Users/vishalmahuli/Desktop/dmu-dus/docs - Folder Exists!
+[2022-09-01 18:19:36,057] {ddsutils.py:87} MainThread INFO in ddsutils: Reading T&C from - /Users/vishalmahuli/Desktop/dmu-dus/DMU-DataDaan/backend/dmu-datastore/config/termsAndConditions.json
+[2022-09-01 18:19:36,059] {ddsutils.py:102} MainThread INFO in ddsutils: ['TERMS_AND_CONDITIONS_V1', 'BHASHINI_IS_GRANTED_V1', 'BHASHINI_REQUESTS_TO_BE_GRANTED_V1', 'ADDITIONAL_DETAILS_V0', 'ACCEPTANCE_V0']
+[2022-09-01 18:19:36,063] {_internal.py:113} MainThread INFO in _internal:  * Running on http://localhost:5001/ (Press CTRL+C to quit)
