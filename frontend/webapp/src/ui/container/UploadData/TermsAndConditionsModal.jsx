@@ -23,7 +23,6 @@ const TermsAndConditionModal = ({ open, handleClose, ...props }) => {
   const {
     classes,
     handleAgree,
-    handleCancel,
     isChecked,
     toggleCheckbox,
     data,
@@ -127,7 +126,7 @@ const TermsAndConditionModal = ({ open, handleClose, ...props }) => {
               xl={9}
               className={classes.flexEnd}
             >
-              <Button onClick={handleCancel} color="primnary" size="large">
+              <Button onClick={handleClose} color="primnary" size="large">
                 Cancel
               </Button>
             </Grid>
