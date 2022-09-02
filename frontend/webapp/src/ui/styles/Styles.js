@@ -4,7 +4,8 @@ const GlobalStyles = (theme) => ({
   },
 
   card:{
-    padding:theme.spacing(2)
+    padding:theme.spacing(2),
+    textAlign: "justify"
   },
 
   flexCenter: {
@@ -105,6 +106,16 @@ const GlobalStyles = (theme) => ({
     width: "75%",
     marginTop: "10%",
     marginLeft: "5%",
+  },
+
+  radioBox: {
+    display: "flex",
+    alignItems: "baseline",
+  },
+
+  radiolabel: {
+    marginTop: "15px",
+    marginLeft: "10px"
   }
 });
 
