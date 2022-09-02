@@ -49,8 +49,6 @@ class DDSValidator:
             response = self.validate_terms_and_cond(agreement)
             if response:
                 return response
-            log.info(files.keys())
-            log.info(api_request.form.keys())
             return None
         except Exception as e:
             log.exception(f"Exception in upload validation: {e}", e)
