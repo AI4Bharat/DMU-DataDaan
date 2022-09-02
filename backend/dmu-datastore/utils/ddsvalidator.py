@@ -1,3 +1,4 @@
+import json
 import logging
 
 from repository.ddsrepo import DDSRepo
@@ -40,19 +41,20 @@ class DDSValidator:
                 return {"status": "FAILED", "message": "The System is currently busy, please try after sometime."}
             log.info("Validating the Upload request.........")
             files = api_request.files
+            agreement = json.loads(api_request.form.get('agreement'))
             if 'zipFile' not in files.keys():
                 return {"status": "VALIDATION_FAILED", "message": "zipFile is mandatory!"}
             if 'metadata' not in files.keys():
                 return {"status": "VALIDATION_FAILED", "message": "metadata is mandatory!"}
-            if "agreement" not in data.keys():
-                return {"status": "VALIDATION_FAILED", "message": "agreement is mandatory!"}
-            response = self.validate_terms_and_cond(data["agreement"])
+            response = self.validate_terms_and_cond(agreement)
             if response:
                 return response
+            log.info(files.keys())
+            log.info(api_request.form.keys())
             return None
         except Exception as e:
             log.exception(f"Exception in upload validation: {e}", e)
-            return {"status": "VALIDATION_FAILED", "message": "metadata and zipFilePath are mandatory"}
+            return {"status": "VALIDATION_FAILED", "message": "metadata, zipFile, agreement are mandatory"}
 
     def validate_login_req(self, api_request):
         try:

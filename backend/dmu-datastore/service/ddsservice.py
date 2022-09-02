@@ -1,4 +1,5 @@
 import csv
+import json
 import logging
 import time
 import os
@@ -38,6 +39,7 @@ class DDSService:
         if doc_path:
             if not isinstance(doc_path, list):
                 return doc_path
+            data["agreement"] = json.loads(api_request.form.get('agreement'))
             data["uploadId"], data["mediaFilePath"], data["submitterId"] = upload_id, doc_path[0], data["metadata"]["userId"]
             data["createdTimestamp"], data["metadataFilePath"] = eval(str(time.time()).replace('.', '')[0:13]), doc_path[2]
             data["lastUpdatedBy"], data["lastUpdatedTimestamp"] = data["metadata"]["userId"], eval(str(time.time()).replace('.', '')[0:13])

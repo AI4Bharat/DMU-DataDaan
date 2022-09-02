@@ -970,3 +970,11 @@ KeyError: 'HTTP_X_USER_ID'
 [2022-09-01 18:19:36,057] {ddsutils.py:87} MainThread INFO in ddsutils: Reading T&C from - /Users/vishalmahuli/Desktop/dmu-dus/DMU-DataDaan/backend/dmu-datastore/config/termsAndConditions.json
 [2022-09-01 18:19:36,059] {ddsutils.py:102} MainThread INFO in ddsutils: ['TERMS_AND_CONDITIONS_V1', 'BHASHINI_IS_GRANTED_V1', 'BHASHINI_REQUESTS_TO_BE_GRANTED_V1', 'ADDITIONAL_DETAILS_V0', 'ACCEPTANCE_V0']
 [2022-09-01 18:19:36,063] {_internal.py:113} MainThread INFO in _internal:  * Running on http://localhost:5001/ (Press CTRL+C to quit)
+[2022-09-01 18:28:28,705] {app.py:21} MainThread INFO in app: /Users/vishalmahuli/Desktop/dmu-dus/docs - Folder Exists!
+[2022-09-01 18:28:28,705] {ddsutils.py:87} MainThread INFO in ddsutils: Reading T&C from - /Users/vishalmahuli/Desktop/dmu-dus/DMU-DataDaan/backend/dmu-datastore/config/termsAndConditions.json
+[2022-09-01 18:28:28,706] {ddsutils.py:102} MainThread INFO in ddsutils: ['TERMS_AND_CONDITIONS_V1', 'BHASHINI_IS_GRANTED_V1', 'BHASHINI_REQUESTS_TO_BE_GRANTED_V1', 'ADDITIONAL_DETAILS_V0', 'ACCEPTANCE_V0']
+[2022-09-01 18:28:28,707] {_internal.py:113} MainThread INFO in _internal:  * Running on http://localhost:5001/ (Press CTRL+C to quit)
+[2022-09-02 11:35:58,740] {app.py:21} MainThread INFO in app: /Users/vishalmahuli/Desktop/dmu-dus/docs - Folder Exists!
+[2022-09-02 11:35:58,740] {ddsutils.py:87} MainThread INFO in ddsutils: Reading T&C from - /Users/vishalmahuli/Desktop/dmu-dus/DMU-DataDaan/backend/dmu-datastore/config/termsAndConditions.json
+[2022-09-02 11:35:58,741] {ddsutils.py:102} MainThread INFO in ddsutils: ['TERMS_AND_CONDITIONS_V1', 'BHASHINI_IS_GRANTED_V1', 'BHASHINI_REQUESTS_TO_BE_GRANTED_V1', 'ADDITIONAL_DETAILS_V0', 'ACCEPTANCE_V0']
+[2022-09-02 11:35:58,743] {_internal.py:113} MainThread INFO in _internal:  * Running on http://localhost:5001/ (Press CTRL+C to quit)
