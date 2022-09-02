@@ -4,19 +4,13 @@ import { Grid, Typography } from "@material-ui/core";
 import { useState } from "react";
 import FileUpload from "../../components/FileUpload";
 import GlobalStyles from "../../styles/Styles";
-import TermsAndConditionModal from "./TermsAndConditionsModal";
 import { useHistory } from "react-router-dom";
-import { useEffect } from "react";
 import FileUploadAPI from "../../../actions/apis/FileUpload/FileUpload";
 import Snackbar from "../../components/Snackbar";
 import LinearIndeterminate from "../../components/LinearProgress";
-import TermsAndConditions from "../../../actions/apis/TermsAndConditions/GetTermsAndConditions";
-import AcceptTermsAndConditions from "../../../actions/apis/TermsAndConditions/AcceptTermsAndConditions";
 
 const UploadData = (props) => {
   const { classes } = props;
-  const [modal, setModal] = useState(false);
-  const [checkbox, setCheckbox] = useState(false);
   const [meta, setMeta] = useState([]);
   const [zip, setZip] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -26,109 +20,9 @@ const UploadData = (props) => {
     message: "",
     variant: "success",
   });
-  const [tAndCData, setTAndCData] = useState({});
 
   const handleSnackbarClose = () => {
     setSnackbarInfo({ ...snackbar, open: false });
-  };
-
-  const fetchTAndCData = async () => {
-    const apiObj = new TermsAndConditions();
-    fetch(apiObj.apiEndPoint(), {
-      method: "get",
-      headers: apiObj.getHeaders(),
-    })
-      .then(async (res) => {
-        const rsp_data = await res.json();
-        if (res.ok) {
-          const {
-            termsAndConditions: { mainText, specificPermissions },
-          } = rsp_data;
-          setTAndCData({ mainText, specificPermissions });
-        } else {
-          return Promise.reject(rsp_data);
-        }
-      })
-      .catch((err) => {
-        setSnackbarInfo({
-          ...snackbar,
-          open: true,
-          message: err.message,
-          variant: "error",
-        });
-      });
-  };
-
-  useEffect(() => {
-    const {
-      user: { termsAndConditions },
-    } = JSON.parse(localStorage.getItem("userInfo"));
-    if (termsAndConditions === undefined) {
-      fetchTAndCData();
-      setModal(true);
-    }
-  }, []);
-
-  const handleClose = () => {
-    setModal(false);
-  };
-
-  const handleCancel = () => {
-    history.push(`${process.env.PUBLIC_URL}/`);
-  };
-
-  const acceptTermsAndConditions = (permission, termsAndConditions) => {
-    const apiObj = new AcceptTermsAndConditions(termsAndConditions, permission);
-    fetch(apiObj.apiEndPoint(), {
-      method: "POST",
-      body: JSON.stringify(apiObj.getBody()),
-      headers: apiObj.getHeaders().headers,
-    })
-      .then(async (res) => {
-        const rsp_data = await res.json();
-        if (res.ok) {
-          localStorage.setItem("isAccepted", true);
-          setSnackbarInfo({
-            ...snackbar,
-            open: true,
-            message: rsp_data.message,
-            variant: "success",
-          });
-          handleClose();
-        } else {
-          return Promise.reject(rsp_data);
-        }
-      })
-      .catch((err) => {
-        handleClose();
-        setSnackbarInfo({
-          ...snackbar,
-          open: true,
-          message: err.message,
-          variant: "error",
-        });
-        setTimeout(() => {
-          localStorage.clear();
-          history.push(`${process.env.PUBLIC_URL}/`);
-        }, [3000]);
-      });
-  };
-
-  const handleAgree = (permission, termsAndConditions) => {
-    acceptTermsAndConditions(permission, termsAndConditions);
-  };
-
-  const handleCheckboxChange = (event) => {
-    setCheckbox(event.target.checked);
-  };
-
-  const handleFileChange = (files) => {
-    if (files.length > 0) {
-      let path = files[0].name.split(".");
-      let fileType = path[path.length - 1];
-      let fileName = path.splice(0, path.length - 1).join(".");
-      return { path, fileType, fileName };
-    }
   };
 
   const handleMetaFileChange = (files) => {
@@ -161,7 +55,10 @@ const UploadData = (props) => {
       variant: "info",
     });
     setLoading(true);
-    const apiObj = new FileUploadAPI(meta, zip);
+
+    const {permission, termsAndConditions, additionalDetails, acceptance} = JSON.parse(localStorage.getItem("acceptedTnC"));
+    const apiObj = new FileUploadAPI(meta, zip, permission, termsAndConditions, additionalDetails, acceptance);
+    
     fetch(apiObj.apiEndPoint(), {
       method: "post",
       body: apiObj.getFormData(),
@@ -283,17 +180,6 @@ const UploadData = (props) => {
         </Box>
       </Box>
 
-      {modal && Object.keys(tAndCData).length && (
-        <TermsAndConditionModal
-          open={modal}
-          isChecked={checkbox}
-          toggleCheckbox={handleCheckboxChange}
-          handleClose={handleClose}
-          handleAgree={handleAgree}
-          handleCancel={handleCancel}
-          data={tAndCData}
-        />
-      )}
       {snackbar.open && (
         <Snackbar
           open={snackbar.open}
