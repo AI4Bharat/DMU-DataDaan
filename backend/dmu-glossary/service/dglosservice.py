@@ -24,8 +24,8 @@ class DGlosService:
         log.info(f"{req_id} | Uploading Glossary...")
         glossary = []
         for glossary_entry in data["glossary"]:
-            glossary_entry["createdTime"], = eval(str(time.time()).replace('.', '')[0:13])
-            glossary_entry["glossaryId"] = str(uuid.uuid4())
+            audit = {"createdTime": eval(str(time.time()).replace('.', '')[0:13]), "glossaryId": str(uuid.uuid4())}
+            glossary_entry["audit"], = audit
             glossary.append(glossary_entry)
         log.info(f"{req_id} | Pushing to the backup store...")
         dglos_repo.insert_bulk(glossary)
@@ -41,7 +41,7 @@ class DGlosService:
             log.info(f"{req_id} | Searching Glossary for phrases in: {sentence}")
             glossary_phrases = self.glossary_phrase_search(sentence)
             if glossary_phrases:
-                log.info(f"{req_id} | sentence: {sentence} | search_details: {glossary_phrases[1]}")
+                log.info(f"{req_id} | sentence: {sentence} | compute_details: {glossary_phrases[1]}")
             result.append({"sentence": sentence, "glossaryPhrases": glossary_phrases})
         return result
 
@@ -61,7 +61,7 @@ class DGlosService:
                         short = phrase.rstrip('.,')
                         suffix_phrase_list.append(short)
                     for phrase in suffix_phrase_list:
-                        result = self.search_from_store({"phrase": phrase})
+                        result = self.search_from_es_store({"srcText": phrase})
                         computed += 1
                         if result:
                             glossary_phrases.extend(result)
@@ -89,8 +89,23 @@ class DGlosService:
         return glossary_phrases, res_dict
 
     def search_from_store(self, data):
-        query = {"submitterId": data["metadata"]["userId"]}
-        if 'sentence' in data.keys():
-            query["sentence"] = data["sentence"]
+        query = {}
+        if 'srcText' in data.keys():
+            query["srcText"] = data["srcText"]
+        if 'domain' in data.keys():
+            query["domain"] = data["domain"]
+        if 'collectionSource' in data.keys():
+            query["collectionSource"] = data["collectionSource"]
         result = dglos_repo.search_db(query, {"_id": False}, None, None)
+        return result
+
+    def search_from_es_store(self, data):
+        query = {}
+        if 'srcText' in data.keys():
+            query["srcText"] = data["srcText"]
+        if 'domain' in data.keys():
+            query["domain"] = data["domain"]
+        if 'collectionSource' in data.keys():
+            query["collectionSource"] = data["collectionSource"]
+        result = dglos_repo.search_basic_from_es(query)
         return result
