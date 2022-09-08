@@ -71,14 +71,29 @@ class DGlosRepo:
         updated = col.update(find_query, {"$set": set_clause})
         return updated
 
-    # Method to index errors on to elasticsearch.
+    # Method to index on to elasticsearch.
     def index_basic_to_es(self, index_obj):
         try:
             es = self.get_es_client()
             index_obj = self.add_timestamp_field(index_obj)
             es.index(index=base_index, id=index_obj["glosssaryId"], body=index_obj)
         except Exception as e:
-            log.exception("Indexing FAILED for errorID: " + index_obj["errorID"], e)
+            log.exception("Indexing FAILED", e)
+
+    # Method to search from elasticsearch.
+    def search_basic_from_es(self, query):
+        result = []
+        try:
+            es = self.get_es_client()
+            resp = es.search(index=base_index, query={"match_all": query})
+            hits = resp['hits']['total']['value']
+            log.info(f"Got {hits} Hits!")
+            if hits > 0:
+                for hit in resp['hits']['hits']:
+                    result.append(hit["_source"])
+        except Exception as e:
+            log.exception("Searching FAILED", e)
+        return result
 
     # Method to generate timestamp in the format es expects per index object.
     def add_timestamp_field(self, index_obj):
