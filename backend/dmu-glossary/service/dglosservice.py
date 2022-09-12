@@ -1,6 +1,8 @@
 import logging
 import time
 import uuid
+
+import pandas as pd
 from flask_restful import reqparse
 
 from utils.dglosutils import DGlosUtils
@@ -18,22 +20,44 @@ class DGlosService:
     def __init__(self):
         pass
 
-    def upload(self, data):
+    def create(self, data):
         # validate
         req_id = data["metadata"]["requestId"]
         log.info(f"{req_id} | Uploading Glossary...")
-        glossary = []
-        for glossary_entry in data["glossary"]:
-            audit = {"createdTime": eval(str(time.time()).replace('.', '')[0:13]), "glossaryId": str(uuid.uuid4())}
-            glossary_entry["audit"], = audit
-            glossary.append(glossary_entry)
-        log.info(f"{req_id} | Pushing to the backup store...")
-        dglos_repo.insert_bulk(glossary)
-        log.info(f"{req_id} | Pushing to ES...")
-        for glos in glossary:
-            dglos_repo.index_basic_to_es(glos)
-        log.info(f"{req_id} | Upload Complete!")
-        return {"status": "Success", "message": "Glossary Uploaded!"}
+        try:
+            glossary = []
+            for glossary_entry in data["glossary"]:
+                audit = {"createdTime": eval(str(time.time()).replace('.', '')[0:13]), "glossaryId": str(uuid.uuid4())}
+                glossary_entry["audit"], = audit
+                glossary.append(glossary_entry)
+            log.info(f"{req_id} | Pushing to the backup store...")
+            dglos_repo.insert_bulk(glossary)
+            log.info(f"{req_id} | Pushing to ES...")
+            for glos in glossary:
+                dglos_repo.index_basic_to_es(glos)
+            log.info(f"{req_id} | Upload Complete!")
+            return {"status": "Success", "message": "Glossary Uploaded!"}
+        except Exception as e:
+            log.exception("Glossary upload failed!", e)
+            return {"status": "FAILED", "message": "Glossary Upload FAILED!"}
+
+    def upload_file(self, api_request, data):
+        # validate
+        req_id = data["metadata"]["requestId"]
+        log.info(f"{req_id} | Uploading Glossary File...")
+        try:
+            f = api_request.files['glossaryFile']
+            data_xls = pd.read_excel(f)
+            data["glossary"] = data_xls.to_json()
+            upload_successful = self.create(data)
+            if upload_successful:
+                if upload_successful["status"] == "Success":
+                    log.info(f"{req_id} | Upload Complete!")
+                    return {"status": "Success", "message": "Glossary Uploaded!"}
+            return {"status": "FAILED", "message": "Glossary Upload FAILED!"}
+        except Exception as e:
+            log.exception("File upload failed!", e)
+            return {"status": "FAILED", "message": "Glossary File Upload FAILED!"}
 
     def search_glossary(self, data):
         req_id, result = data["metadata"]["requestId"], []

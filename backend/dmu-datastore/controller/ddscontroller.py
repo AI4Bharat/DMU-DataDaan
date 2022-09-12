@@ -16,11 +16,11 @@ cors = CORS(dds_app, resources={r"/*": {"origins": "*"}}, supports_credentials=T
 log = logging.getLogger('file')
 
 
-@dds_app.route('/ping')
+@dds_app.route(context_path + '/ping')
 def index():
     return jsonify(
         status=True,
-        message='Welcome to the DMU Backend Server!'
+        message='Welcome to the DMU DUS Server!'
     )
 
 

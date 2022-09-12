@@ -15,22 +15,36 @@ cors = CORS(dglos_app, resources={r"/*": {"origins": "*"}}, supports_credentials
 log = logging.getLogger('file')
 
 
-@dglos_app.route('/ping')
+@dglos_app.route(context_path + '/ping')
 def index():
     return jsonify(
         status=True,
-        message='Welcome to the DMU Backend Server!'
+        message='Welcome to the DMU Glossary Server!'
     )
 
 
 # REST endpoint for login
-@dglos_app.route(context_path + '/v1/glossary/upload', methods=["POST"])
+@dglos_app.route(context_path + '/v1/glossary/create', methods=["POST"])
+def create():
+    dglos_service, validator = DGlosService(), DGlosValidator()
+    data = request.get_json()
+    data = add_headers(data, request, "userId")
+    try:
+        response = dglos_service.create(data)
+        return jsonify(response), 200
+    except Exception as e:
+        log.exception("Something went wrong: " + str(e), e)
+        return {"status": "FAILED", "message": "Something went wrong"}, 400
+
+
+# REST endpoint for login
+@dglos_app.route(context_path + '/v1/glossary/file/upload', methods=["POST"])
 def upload():
     dglos_service, validator = DGlosService(), DGlosValidator()
     data = request.get_json()
     data = add_headers(data, request, "userId")
     try:
-        response = dglos_service.upload(data)
+        response = dglos_service.upload_file(request, data)
         return jsonify(response), 200
     except Exception as e:
         log.exception("Something went wrong: " + str(e), e)

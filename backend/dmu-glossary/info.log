@@ -979,3 +979,4 @@ KeyError: 'HTTP_X_USER_ID'
 [2022-09-02 11:35:58,741] {ddsutils.py:102} MainThread INFO in ddsutils: ['TERMS_AND_CONDITIONS_V1', 'BHASHINI_IS_GRANTED_V1', 'BHASHINI_REQUESTS_TO_BE_GRANTED_V1', 'ADDITIONAL_DETAILS_V0', 'ACCEPTANCE_V0']
 [2022-09-02 11:35:58,743] {_internal.py:113} MainThread INFO in _internal:  * Running on http://localhost:5001/ (Press CTRL+C to quit)
 [2022-09-07 15:33:26,970] {_internal.py:113} MainThread INFO in _internal:  * Running on http://localhost:5001/ (Press CTRL+C to quit)
+[2022-09-12 16:03:09,037] {_internal.py:113} MainThread INFO in _internal:  * Running on http://localhost:5001/ (Press CTRL+C to quit)
