@@ -3,7 +3,7 @@ import os
 db_cluster = os.environ.get('MONGO_CLUSTER_URL', 'mongodb://localhost:27017')
 app_host = os.environ.get('DDS_APP_HOST', 'localhost')
 app_port = os.environ.get('DDS_APP_PORT', 5001)
-context_path = os.environ.get('DMU_DUS_CONTEXT_PATH', '/dmu-datastore/data-upload-service')
+context_path = os.environ.get('DMU_DUS_CONTEXT_PATH', '/datadaaan')
 db = os.environ.get('DMU_DUS_DB', "dmu-datastore")
 user_collection = os.environ.get('DMU_DUS_USER_COL', "users")
 dds_collection = os.environ.get('DMU_DUS_DDS_COL', "dds")
