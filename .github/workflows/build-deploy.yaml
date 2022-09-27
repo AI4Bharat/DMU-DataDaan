@@ -1,7 +1,7 @@
 name: Automated Deployment Pipeline
 on:
   push:
-    branches: [develop]
+    branches: [master]
 jobs:
   build:
     name: Build
