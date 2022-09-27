@@ -172,7 +172,8 @@ const themeDefault = createMuiTheme({
     },
     MuiFormControlLabel: {
       root: {
-        height: "36px",
+        height: "auto",
+        marginBottom: "25px"
       },
       label: {
         fontFamily: '"Roboto" ,sans-serif',

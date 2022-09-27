@@ -22,8 +22,11 @@
 ## General Requirements
 * The actual media files should be zipped (zip or gz)
 * Platform to support max size of 5GB zip file.
-* The metadata file format can be tsv (format specified in the section below)
-* The contributor would download the metadata file, fill in the details and then reupload along with the zip.
+* The metadata file format can be txt file (though it is a free text, we highly encourage to keep it structural & precise)                                                                                            
+
+## API Specs
+The APIs used in DataDaan are specified as OpenAPI 3 under <a href="https://app.swaggerhub.com/apis/ulca/datadaan/1.0.0">`SwaggerHub Specs`</a>
+
 
 ## DataDaan Architecture
 <p align="center">

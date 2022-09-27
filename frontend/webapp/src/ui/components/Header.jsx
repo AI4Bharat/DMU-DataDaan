@@ -18,7 +18,7 @@ import bhashiniLogo from "../../assets/Bhashini_en.svg";
 import DatadaanLogo from "../../assets/DataDaan.svg";
 import { useHistory } from "react-router-dom";
 import DownIcon from "@material-ui/icons/ArrowDropDown";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DataDaan from "../../assets/DataDaan.png";
 
 const StyledMenu = withStyles({
@@ -46,6 +46,7 @@ const StyledMenu = withStyles({
 const Header = (props) => {
   const { classes } = props;
   const [logout, setAnchorElLogout] = useState(null);
+  const [username, setUsername] = useState('');
   const history = useHistory();
 
   const handleClose = () => {
@@ -56,6 +57,11 @@ const Header = (props) => {
     setAnchorElLogout(e.currentTarget);
   };
 
+  useEffect(() => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    setUsername(userInfo.user.username);
+  }, []);
+  
   return (
     <MuiThemeProvider theme={Theme}>
       <AppBar color="inherit" position="static">
@@ -91,12 +97,12 @@ const Header = (props) => {
               <Avatar
                 className={classes.avatar}
                 variant="contained"
-              >{`D`}</Avatar>
+              >{username.charAt(0)}</Avatar>
               <Typography
                 variant="body1"
                 color="textPrimary"
                 className={classes.profileName}
-              >{`DMU Master`}</Typography>
+              >{username}</Typography>
               <DownIcon color="action" />
             </Button>
             <StyledMenu
