@@ -15,6 +15,6 @@ jobs:
         password: ${{ secrets.PROD_PASSWORD }}
         script: |
           cd DMU-DataDaan
-          git checkout develop
+          git checkout master
           git pull
           docker-compose up --build -d
