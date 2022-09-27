@@ -14,5 +14,7 @@ jobs:
         username: ${{ secrets.PROD_USERNAME }}
         password: ${{ secrets.PROD_PASSWORD }}
         script: |
-          whoami
-          ls -al
+          cd DMU-DataDaan
+          git checkout develop
+          git pull
+          docker-compose up --build -d
