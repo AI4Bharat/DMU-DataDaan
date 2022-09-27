@@ -14,5 +14,5 @@ jobs:
         username: ${{ secrets.PROD_USERNAME }}
         password: ${{ secrets.PROD_PASSWORD }}
         script: |
-        whoami
-        ls -al
+          whoami
+          ls -al
