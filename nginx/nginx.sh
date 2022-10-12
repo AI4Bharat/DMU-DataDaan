@@ -52,7 +52,7 @@ for domain in $domains_fixed; do
   if [ ! -f "/etc/nginx/sites/ssl/dummy/$domain/fullchain.pem" ]; then
     echo "Generating dummy ceritificate for $domain"
     mkdir -p "/etc/nginx/sites/ssl/dummy/$domain"
-    printf "[dn]\nCN=${domain}\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:$domain, DNS:www.$domain\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth" > openssl.cnf
+    printf "[dn]\nCN=${domain}\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:$domain" > openssl.cnf
     openssl req -x509 -out "/etc/nginx/sites/ssl/dummy/$domain/fullchain.pem" -keyout "/etc/nginx/sites/ssl/dummy/$domain/privkey.pem" \
       -newkey rsa:2048 -nodes -sha256 \
       -subj "/CN=${domain}" -extensions EXT -config openssl.cnf

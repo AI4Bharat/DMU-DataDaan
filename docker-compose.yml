@@ -10,11 +10,14 @@ services:
             REACT_APP_APIGW_BASE_URL: http://upload.dmu.ai4bharat.org/api
         ports:
             - "80:80"
+            - "443:443"
         volumes: 
             - ./frontend:/app
             - /app/node_modules
         networks:
             - frontend
+        depends_on: 
+            - api
 
     mongodb:
         image: mongo
