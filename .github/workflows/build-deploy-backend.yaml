@@ -4,7 +4,7 @@ on:
     branches: [master]
 jobs:
   build:
-    name: Build
+    name: Build and Deploy
     runs-on: ubuntu-latest
     steps:
     - name: Building and Deploying containers on VM
@@ -17,4 +17,4 @@ jobs:
           cd DMU-DataDaan
           git checkout master
           git pull
-          docker-compose up --build -d
+          docker-compose -f d-c.yml up --build -d
