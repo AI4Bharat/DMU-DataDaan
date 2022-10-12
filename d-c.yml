@@ -84,6 +84,6 @@ volumes:
   node_modules:
   client_build:
   mongodbdata:
-    driver: local
+    external: true
   appdata:
-    driver: local
+    external: true
