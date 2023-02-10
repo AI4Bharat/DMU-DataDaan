@@ -54,7 +54,7 @@ const MyContribution = (props) => {
         sort: true,
         customBodyRender: (value) => {
           const date = new Date(value);
-          return <>{moment(date).format("DD/MM/YYYY")}</>;
+          return <>{moment(date).format("DD/MM/YYYY HH:MM:SS")}</>;
         },
       },
     },
