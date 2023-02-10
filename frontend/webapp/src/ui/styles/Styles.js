@@ -1,5 +1,9 @@
 const GlobalStyles = (theme) => ({
   container: {
+    maxWidth: "1272px",
+    width: "100%",
+    margin: "2rem auto",
+    // background: theme.palette.background.default,
     fontFamily: theme.typography.fontFamily,
   },
 

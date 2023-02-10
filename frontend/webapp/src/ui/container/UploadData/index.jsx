@@ -1,13 +1,15 @@
 import { Box, Button, Divider, Link } from "@material-ui/core";
 import { withStyles } from "@material-ui/core";
 import { Grid, Typography } from "@material-ui/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FileUpload from "../../components/FileUpload";
 import GlobalStyles from "../../styles/Styles";
 import { useHistory } from "react-router-dom";
 import FileUploadAPI from "../../../actions/apis/FileUpload/FileUpload";
 import Snackbar from "../../components/Snackbar";
 import LinearIndeterminate from "../../components/LinearProgress";
+import TermsAndConditionsModal from "./TermsAndConditionsModal";
+import TermsAndConditions from "../../../actions/apis/TermsAndConditions/GetTermsAndConditions";
 
 const UploadData = (props) => {
   const { classes } = props;
@@ -20,6 +22,86 @@ const UploadData = (props) => {
     message: "",
     variant: "success",
   });
+  const [tAndCData, setTAndCData] = useState({});
+  const [modal, setModal] = useState(false);
+  const [checkbox, setCheckbox] = useState(false);
+
+  const fetchTAndCData = async () => {
+    const apiObj = new TermsAndConditions();
+
+    fetch(apiObj.apiEndPoint(), {
+      method: "get",
+      headers: apiObj.getHeaders(),
+    })
+      .then(async (res) => {
+        const rsp_data = await res.json();
+
+        if (res.ok) {
+          const {
+            termsAndConditions: {
+              acceptance,
+              additionalDetails,
+              mainText,
+              specificPermissions,
+            },
+          } = rsp_data;
+          setTAndCData({
+            acceptance,
+            additionalDetails,
+            mainText,
+            specificPermissions,
+          });
+          setModal(true);
+        } else {
+          return Promise.reject(rsp_data);
+        }
+      })
+      .catch((err) => {
+        setSnackbarInfo({
+          ...snackbar,
+          open: true,
+          message: err.message,
+          variant: "error",
+        });
+      });
+  };
+
+  useEffect(() => {
+    if (!localStorage.getItem("acceptedTnC")) {
+      fetchTAndCData();
+    }
+  }, []);
+
+  const handleClose = () => {
+    history.push(`${process.env.PUBLIC_URL}/datadaan/my-contribution`);
+    setModal(false);
+  };
+
+  const handleAgree = (
+    permission,
+    termsAndConditions,
+    additionalDetails,
+    acceptance
+  ) => {
+    localStorage.setItem(
+      "acceptedTnC",
+      JSON.stringify({
+        permission,
+        termsAndConditions,
+        additionalDetails,
+        acceptance,
+      })
+    );
+    setModal(false);
+  };
+
+  const handleCheckboxChange = (event) => {
+    setCheckbox(event.target.checked);
+  };
+
+  const handleCancel = () => {
+    history.push(`${process.env.PUBLIC_URL}/datadaan/my-contribution`);
+  };
 
   const handleSnackbarClose = () => {
     setSnackbarInfo({ ...snackbar, open: false });
@@ -56,9 +138,17 @@ const UploadData = (props) => {
     });
     setLoading(true);
 
-    const {permission, termsAndConditions, additionalDetails, acceptance} = JSON.parse(localStorage.getItem("acceptedTnC"));
-    const apiObj = new FileUploadAPI(meta, zip, permission, termsAndConditions, additionalDetails, acceptance);
-    
+    const { permission, termsAndConditions, additionalDetails, acceptance } =
+      JSON.parse(localStorage.getItem("acceptedTnC"));
+    const apiObj = new FileUploadAPI(
+      meta,
+      zip,
+      permission,
+      termsAndConditions,
+      additionalDetails,
+      acceptance
+    );
+
     fetch(apiObj.apiEndPoint(), {
       method: "post",
       body: apiObj.getFormData(),
@@ -187,6 +277,18 @@ const UploadData = (props) => {
           anchorOrigin={{ vertical: "top", horizontal: "right" }}
           message={snackbar.message}
           variant={snackbar.variant}
+        />
+      )}
+
+      {modal && (
+        <TermsAndConditionsModal
+          open={modal}
+          isChecked={checkbox}
+          toggleCheckbox={handleCheckboxChange}
+          handleClose={handleClose}
+          handleAgree={handleAgree}
+          handleCancel={handleCancel}
+          data={tAndCData}
         />
       )}
     </>
