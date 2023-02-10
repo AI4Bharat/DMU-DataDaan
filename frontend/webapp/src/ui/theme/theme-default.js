@@ -1,6 +1,6 @@
-import { createMuiTheme } from "@material-ui/core/styles";
+import { createTheme } from "@material-ui/core/styles";
 
-const themeDefault = createMuiTheme({
+const themeDefault = createTheme({
   typography: {
     fontFamily: '"Roboto"',
     fontWeight: "400",
@@ -135,7 +135,7 @@ const themeDefault = createMuiTheme({
     MUIDataTableHeadCell: {
       root: {
         "&:nth-child(1)": {
-          width: "25%",
+          width: "18%",
         },
         "&:nth-child(2)": {
           width: "18%",

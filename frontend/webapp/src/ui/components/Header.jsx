@@ -16,7 +16,7 @@ import Theme from "../theme/theme-default";
 import Avatar from "@material-ui/core/Avatar";
 import bhashiniLogo from "../../assets/Bhashini_en.svg";
 import DatadaanLogo from "../../assets/DataDaan.svg";
-import { useHistory } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import DownIcon from "@material-ui/icons/ArrowDropDown";
 import { useState, useEffect } from "react";
 import DataDaan from "../../assets/DataDaan.png";
@@ -62,6 +62,14 @@ const Header = (props) => {
     setUsername(userInfo.user.username);
   }, []);
   
+  const handleMenuTypeClick = (value) => {
+    if (value === "contribution") {
+      history.push(`${process.env.PUBLIC_URL}/datadaan/my-contribution`);
+    } else if (value === "upload") {
+      history.push(`${process.env.PUBLIC_URL}/datadaan/upload-data`);
+    }
+  };
+
   return (
     <MuiThemeProvider theme={Theme}>
       <AppBar color="inherit" position="static">
@@ -88,6 +96,32 @@ const Header = (props) => {
                 src={DatadaanLogo}
                 alt="Datadaan Logo"
               /> */}
+
+          <div style={{ background: window.location.pathname.includes("my-contribution") ? "#f5f5f5": "", marginRight: "20px"}}
+          >
+            <Button
+              className={classes.menuBtn}
+              onClick={(e) => handleMenuTypeClick("contribution")}
+              variant="text"
+            >
+              My Contribution
+            </Button>
+          </div>
+
+          <div>
+            <div
+              className={classes.model}
+              style={window.location.pathname.includes("upload-data") ? { background: "#f5f5f5" } : {}}
+            >
+              <Button
+                className={classes.menuBtn}
+                variant="text"
+                onClick={(e) => handleMenuTypeClick("upload")}
+              >
+                Upload 
+              </Button>
+            </div>
+          </div>
 
           <div className={classes.profile}>
             <Button
