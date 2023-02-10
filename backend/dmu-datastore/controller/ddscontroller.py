@@ -130,7 +130,7 @@ def doc_upload():
 @dds_app.route(context_path + '/v1/upload/search', methods=["POST"])
 def doc_search():
     dds_service, user_service = DDSService(), UserService()
-    data = request.get_json()
+    data = request.get_json(silent=True)
     data = add_headers(data, request, "userId")
     try:
         user_id = user_service.is_session_active(data["metadata"]["token"])
