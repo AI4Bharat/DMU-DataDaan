@@ -1,6 +1,6 @@
-import { Box, Button, Divider, Link } from "@material-ui/core";
+import { Box, Button, Divider, TextField } from "@material-ui/core";
 import { withStyles } from "@material-ui/core";
-import { Grid, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import FileUpload from "../../components/FileUpload";
 import GlobalStyles from "../../styles/Styles";
@@ -10,6 +10,7 @@ import Snackbar from "../../components/Snackbar";
 import LinearIndeterminate from "../../components/LinearProgress";
 import TermsAndConditionsModal from "./TermsAndConditionsModal";
 import TermsAndConditions from "../../../actions/apis/TermsAndConditions/GetTermsAndConditions";
+import { textFields } from "../../../utils/utils";
 
 const UploadData = (props) => {
   const { classes } = props;
@@ -25,6 +26,29 @@ const UploadData = (props) => {
   const [tAndCData, setTAndCData] = useState({});
   const [modal, setModal] = useState(false);
   const [checkbox, setCheckbox] = useState(false);
+  const [userDetails, setUserDetails] = useState({
+    orgName: "",
+    officerName: "",
+    designation: "",
+    emailId: "",
+    contactNumber: "",
+  });
+
+  const disableSubmit = () => {
+    if (
+      meta.length <= 0 ||
+      zip.length <= 0 ||
+      !userDetails.orgName ||
+      !userDetails.officerName ||
+      !userDetails.designation ||
+      !userDetails.emailId ||
+      !userDetails.contactNumber
+    ) {
+      return true;
+    }
+
+    return false;
+  };
 
   const fetchTAndCData = async () => {
     const apiObj = new TermsAndConditions();
@@ -140,13 +164,15 @@ const UploadData = (props) => {
 
     const { permission, termsAndConditions, additionalDetails, acceptance } =
       JSON.parse(localStorage.getItem("acceptedTnC"));
+
     const apiObj = new FileUploadAPI(
       meta,
       zip,
       permission,
       termsAndConditions,
       additionalDetails,
-      acceptance
+      acceptance,
+      userDetails
     );
 
     fetch(apiObj.apiEndPoint(), {
@@ -177,36 +203,18 @@ const UploadData = (props) => {
           variant: "error",
         });
       });
+  };
 
-    // const apiendpoint = `${config.BASE_URL_AUTO}${apiendpoints.upload}`;
-    // const {
-    //   token,
-    //   user: { userId },
-    // } = JSON.parse(localStorage.getItem("userInfo"));
-    // const formData = new FormData();
-    // formData.append("zipFile", zip[0]);
-    // formData.append("metadata", meta[0]);
-    // for (const pair of formData.entries()) {
-    //   console.log(`${pair[0]}`);
-    // }
-    // fetch(apiendpoint, {
-    //   method: "POST",
-    //   body: formData,
-    //   headers: {
-    //     "x-token": token,
-    //     "x-user-id": userId,
-    //     "Content-Type": "multipart/form-data",
-    //   },
-    // })
-    //   .then(async (res) => {
-    //     const rsp_data = await res.json();
-    //     if (res.ok) {
-    //       console.log(rsp_data);
-    //     } else {
-    //       return Promise.reject(rsp_data);
-    //     }
-    //   })
-    //   .catch((err) => err);
+  const handleClearAll = () => {
+    setMeta([]);
+    setZip([]);
+    setUserDetails({
+      orgName: "",
+      officerName: "",
+      designation: "",
+      emailId: "",
+      contactNumber: "",
+    });
   };
 
   return (
@@ -220,14 +228,23 @@ const UploadData = (props) => {
               alignSelf: "center",
             }}
           >
-            <Typography>How to submit the files</Typography>
+            <Typography>Best practices for submitting the files</Typography>
             <ul>
-              <li>Make sure the names of text file and zip file are same.</li>
-              <li>Max supported zip file size is 5 GB.</li>
+              <li className={classes.listStyle}>
+                Make sure the names of text file and zip file are{" "}
+                <strong>same</strong>.
+              </li>
+              <li className={classes.listStyle}>
+                Max supported zip file size is <strong>5 GB</strong>.
+              </li>
+              <li className={classes.listStyle}>
+                The README file should also contain metadata that specifies the{" "}
+                <strong>directory structure</strong> of the zipped file.
+              </li>
             </ul>
           </Box>
           <Divider orientation="vertical" variant="middle" flexItem />
-          <Box style={{ width: "55%" }}>
+          <Box style={{ width: "80%" }}>
             <Box className={`${classes.parentBox} ${classes.innerBox}`}>
               <Typography style={{ marginRight: "auto" }}>
                 README.txt
@@ -257,15 +274,59 @@ const UploadData = (props) => {
                 style={{ width: "65%" }}
               />
             </Box>
-            <Button
-              size="large"
-              variant="contained"
-              color="primary"
-              onClick={handleSubmit}
-              className={classes.submitBtn}
-            >
-              Submit
-            </Button>
+
+            {textFields.map((item, index) => {
+              return (
+                <Box
+                  className={`${classes.parentBox}  ${classes.innerBox}`}
+                  style={{ marginTop: "35px" }}
+                  key={index}
+                >
+                  <Typography style={{ marginRight: "auto", width: "30%" }}>
+                    {item.label}*
+                  </Typography>
+
+                  <TextField
+                    fullWidth
+                    color="primary"
+                    style={{ width: "70%" }}
+                    label={"Enter here"}
+                    name={item.name}
+                    type={item.type}
+                    value={userDetails[item.name]}
+                    onChange={(event) =>
+                      setUserDetails((prev) => ({
+                        ...prev,
+                        [event.target.name]: event.target.value,
+                      }))
+                    }
+                  />
+                </Box>
+              );
+            })}
+
+            <Box style={{ display: "flex" }}>
+              <Button
+                variant="outlined"
+                size="large"
+                color="primary"
+                onClick={handleClearAll}
+                className={classes.submitBtn}
+                style={{ width: "25%" }}
+              >
+                Clear All
+              </Button>
+              <Button
+                size="large"
+                variant="contained"
+                color="primary"
+                onClick={handleSubmit}
+                className={classes.submitBtn}
+                disabled={disableSubmit()}
+              >
+                Submit
+              </Button>
+            </Box>
           </Box>
         </Box>
       </Box>
