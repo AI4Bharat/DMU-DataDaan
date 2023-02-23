@@ -106,6 +106,7 @@ def delete_users():
 @dds_app.route(context_path + '/v1/file/upload', methods=["POST"])
 def doc_upload():
     dds_service, user_service, validator = DDSService(), UserService(), DDSValidator()
+    # data = request.form.get('zipFile')
     data = request.get_json()
     data = add_headers(data, request, "userId")
     try:
@@ -165,6 +166,19 @@ def doc_delete():
     except Exception as e:
         log.exception("Something went wrong: " + str(e), e)
         return {"status": "FAILED", "message": "Something went wrong"}, 400
+
+# @dds_app.route(context_path + '/v1/userinfo', methods=["POST"])
+# def submitter_info():
+#     dds_service, user_service, validator = DDSService(), UserService(), DDSValidator()
+#     data = request.get_json()
+#     submitter_info = {}
+#     submitter_info["orgName"] = data["organisationName"]
+#     submitter_info["name"] = data["submitterName"]
+#     submitter_info["designation"] = data["designation"]
+#     submitter_info["emailId"] = data["emailId"]
+#     submitter_info["contactNumber"] = data ["contactNumber"]
+#     submitter_info["directoryStructure"] = data["directoryStructure"]
+#     return submitter_info
 
 
 '''

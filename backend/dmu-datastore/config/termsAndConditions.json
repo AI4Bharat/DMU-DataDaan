@@ -25,12 +25,12 @@
       },
       {
         "code": "BHASHINI_IS_GRANTED_V1",
-        "value": "The authorised representative of the contributing organisation/institution may select the following option to specify the terms under which content is being contributed:\nThe Mission is granted the right to create and publish datasets for training and benchmarking AI models from the content contributed. Such datasets will be created by extracting a randomly selected fraction of the content contributed, followed by reshuffling and processing the extracted content. The datasets shall be published under a Creative Commons Attribution 4.0 International Public License (“CC BY 4.0”). ",
+        "value": "The authorised representative of the contributing organisation/institution may select the following option to specify the terms under which content is being contributed:\nThe Mission is granted the right to create and publish datasets for training and benchmarking AI models from the content contributed. Such datasets will be created by extracting a randomly selected fraction of the content contributed, followed by reshuffling and processing the extracted content. The datasets shall be published under a Creative Commons Attribution 4.0 International Public License (“CC BY 4.0”) (https://creativecommons.org/licenses/by/4.0/) ",
         "active": true
       },
       {
         "code": "BHASHINI_REQUESTS_TO_BE_GRANTED_V1",
-        "value": "While the above option maximise the utility of the datasets for the Mission's purposes, the contributing organisation/institution may also select the following other option to specify the terms under which content is being contributed:\nThe Mission is granted the right to create from the content contributed in order to train and benchmark AI models, with the right to publish the trained models under a Creative Commons Attribution 4.0 International Public License (“CC BY 4.0”) and without the right to publish the datasets created.",
+        "value": "While the above option maximise the utility of the datasets for the Mission's purposes, the contributing organisation/institution may also select the following other option to specify the terms under which content is being contributed:\nThe Mission is granted the right to create from the content contributed in order to train and benchmark AI models, with the right to publish the trained models under a Creative Commons Attribution 4.0 International Public License (“CC BY 4.0”)(https://creativecommons.org/licenses/by/4.0/) and without the right to publish the datasets created.",
         "active": true
       }
     ],
