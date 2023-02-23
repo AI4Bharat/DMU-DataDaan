@@ -21,8 +21,6 @@ import { useHistory } from "react-router-dom";
 import config from "../../../../configs/config";
 import apiEndPoint from "../../../../configs/apiendpoints";
 import Snackbar from "../../../components/Snackbar";
-import TermsAndConditions from "../../../../actions/apis/TermsAndConditions/GetTermsAndConditions";
-import TermsAndConditionsModal from "../../UploadData/TermsAndConditionsModal";
 
 const Login = (props) => {
   const [values, setValues] = useState({
@@ -41,42 +39,9 @@ const Login = (props) => {
     variant: "success",
   });
 
-  const [tAndCData, setTAndCData] = useState({});
-  const [modal, setModal] = useState(false);
-  const [checkbox, setCheckbox] = useState(false);
-
-  const fetchTAndCData = async () => {
-    const apiObj = new TermsAndConditions();
-    fetch(apiObj.apiEndPoint(), {
-      method: "get",
-      headers: apiObj.getHeaders(),
-    })
-      .then(async (res) => {
-        const rsp_data = await res.json();
-        if (res.ok) {
-          const {
-            termsAndConditions: { acceptance, additionalDetails, mainText, specificPermissions },
-          } = rsp_data;
-          setTAndCData({ acceptance, additionalDetails, mainText, specificPermissions });
-          localStorage.setItem("termsAndConditions", JSON.stringify( {acceptance, additionalDetails, mainText, specificPermissions}))
-        } else {
-          return Promise.reject(rsp_data);
-        }
-      })
-      .catch((err) => {
-        setSnackbarInfo({
-          ...snackbar,
-          open: true,
-          message: err.message,
-          variant: "error",
-        });
-      });
-  };
-
   useEffect(() => {
     localStorage.removeItem("userInfo");
     localStorage.removeItem("userDetails");
-    fetchTAndCData();
   }, []);
 
   const history = useHistory();
@@ -107,7 +72,8 @@ const Login = (props) => {
         const rsp_data = await res.json();
         if (res.ok) {
           localStorage.setItem("userInfo", JSON.stringify(rsp_data));
-          history.push(`${process.env.PUBLIC_URL}/datadaan/upload-data`);
+          localStorage.removeItem("acceptedTnC");
+          history.push(`${process.env.PUBLIC_URL}/datadaan/my-contribution`);
         } else {
           return Promise.reject(rsp_data);
         }
@@ -135,26 +101,8 @@ const Login = (props) => {
         password: !values.password.trim() ? true : false,
       });
     } else {
-      setModal(true);
+      handleSubmit();
     }
-  };
-
-  const handleClose = () => {
-    setModal(false);
-  };
-
-  const handleAgree = (permission, termsAndConditions, additionalDetails, acceptance) => {
-    localStorage.setItem("acceptedTnC", JSON.stringify({permission, termsAndConditions, additionalDetails, acceptance}))
-    handleSubmit();
-    setLoading(true);
-  };
-
-  const handleCheckboxChange = (event) => {
-    setCheckbox(event.target.checked);
-  };
-
-  const handleCancel = () => {
-    history.push(`${process.env.PUBLIC_URL}/`);
   };
 
   const { classes } = props;
@@ -260,18 +208,6 @@ const Login = (props) => {
           anchorOrigin={{ vertical: "top", horizontal: "right" }}
           message={snackbar.message}
           variant={snackbar.variant}
-        />
-      )}
-
-      {modal && (
-        <TermsAndConditionsModal
-          open={modal}
-          isChecked={checkbox}
-          toggleCheckbox={handleCheckboxChange}
-          handleClose={handleClose}
-          handleAgree={handleAgree}
-          handleCancel={handleCancel}
-          data={tAndCData}
         />
       )}
     </>

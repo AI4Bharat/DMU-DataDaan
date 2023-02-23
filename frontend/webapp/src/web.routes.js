@@ -9,6 +9,7 @@ import {
   import authenticateUser from "./configs/authenticate";
   import Login from './ui/container/UserManagement';
   import UploadData from "./ui/container/UploadData";
+import MyContribution from "./ui/container/MyContribution";
 
   const PrivateRoute = ({
     path,
@@ -56,6 +57,17 @@ import {
           type={"dataset"}
           index={0}
         />
+
+          <PrivateRoute
+            path={`${process.env.PUBLIC_URL}/datadaan/my-contribution`}
+            title={"My Contribution"}
+            authenticate={authenticateUser}
+            component={MyContribution}
+            currentMenu="upload-data"
+            dontShowHeader={false}
+            type={"dataset"}
+            index={0}
+          />
         </Switch>
       </Router>
     );

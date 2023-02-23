@@ -6,7 +6,7 @@ import C from "../../constants";
 import ENDPOINTS from "../../../configs/apiendpoints";
 
 export default class LoginAPI extends API {
-  constructor(metadataFile, zipFile, permission, termsAndConditions, additionalDetails, acceptance, timeout = 2000) {
+  constructor(metadataFile, zipFile, permission, termsAndConditions, additionalDetails, acceptance, userData, timeout = 2000) {
     super("POST", timeout, false, "MULTIPART");
     this.type = C.FILEUPLOAD;
     this.metadataFile = metadataFile;
@@ -15,6 +15,7 @@ export default class LoginAPI extends API {
     this.termsAndConditions = termsAndConditions;
     this.additionalDetails = additionalDetails;
     this.acceptance = acceptance;
+    this.userData= userData;
     this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.upload}`;
     this.userDetails = JSON.parse(localStorage.getItem("userInfo"));
   }
@@ -39,10 +40,13 @@ export default class LoginAPI extends API {
 
     const json = JSON.stringify(obj);
     
+    const submitterInfo = JSON.stringify(this.userData);
+
     const formData = new FormData();
     formData.append("zipFile", this.zipFile[0]);
     formData.append("metadata", this.metadataFile[0]);
     formData.append("agreement", json);
+    formData.append("submitterInfo", submitterInfo);
 
     return formData;
   }

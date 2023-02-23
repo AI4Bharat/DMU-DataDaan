@@ -1,5 +1,9 @@
 const GlobalStyles = (theme) => ({
   container: {
+    maxWidth: "1272px",
+    width: "100%",
+    margin: "2rem auto",
+    // background: theme.palette.background.default,
     fontFamily: theme.typography.fontFamily,
   },
 
@@ -105,7 +109,7 @@ const GlobalStyles = (theme) => ({
     display: "block",
     width: "75%",
     marginTop: "10%",
-    marginLeft: "5%",
+    marginRight: "5%",
   },
 
   radioBox: {
@@ -116,6 +120,11 @@ const GlobalStyles = (theme) => ({
   radiolabel: {
     marginTop: "15px",
     marginLeft: "10px"
+  },
+
+  listStyle: {
+    margin: "8px 0",
+    fontSize: "18px"
   }
 });
 

@@ -1,4 +1,4 @@
-version: "3.7"
+version: "2"
 
 services:
   client:
@@ -6,12 +6,11 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     environment:
-      REACT_APP_APIGW_BASE_URL: http://${DOMAIN_NAME}/api
-      DOMAIN_NAME: ${DOMAIN_NAME}
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-      - client_build:/app/${DOMAIN_NAME}
+      REACT_APP_APIGW_BASE_URL: "https://datadaan.centralindia.cloudapp.azure.com/api/"
+    volumes: 
+      - node_modules:/app/node_modules
+      - client_build:/app/build
+
   mongodb:
     image: mongo
     container_name: mongo
@@ -25,56 +24,52 @@ services:
       - "27017:27017"
     volumes:
       - mongodbdata:/data/db
-    networks:
-      - backend
+
   api:
     build: 
       context: ./backend
       dockerfile: Dockerfile
-    # command: gunicorn --bind 0.0.0.0:5000 app:dds_app --timeout 600 --workers 4 --access-logfile '-' --error-logfile '-'
     expose:
       - 5000
     ports:
-      - 5000
+      - 5000:5000
     env_file:
       - ./.env.prod
     volumes:
       - appdata:/var/www/
     depends_on: 
       - mongodb
-    networks:
-      - frontend
-      - backend
+
   nginx:
     build: ./nginx
+    image: evgeniy-khyst/nginx
     env_file:
       - ./config.env
     volumes:
       - nginx_conf:/etc/nginx/sites
       - letsencrypt_certs:/etc/letsencrypt
       - certbot_acme_challenge:/var/www/certbot
-      - ./vhosts:/etc/nginx/vhosts
       - client_build:/var/www/html
+      - ./vhosts:/etc/nginx/vhosts
     ports:
       - "80:80"
       - "443:443"
     restart: unless-stopped
-    depends_on:
-      - client
-      - api
+
   certbot:
     build: ./certbot
+    image: evgeniy-khyst/certbot
     env_file:
       - ./config.env
     volumes:
       - letsencrypt_certs:/etc/letsencrypt
       - certbot_acme_challenge:/var/www/certbot
-    depends_on:
-      - nginx
+
   cron:
     build: ./cron
-    # environment:
-    #   COMPOSE_PROJECT_NAME: "${COMPOSE_PROJECT_NAME}"
+    image: evgeniy-khyst/cron
+    environment:
+      COMPOSE_PROJECT_NAME: "${COMPOSE_PROJECT_NAME}"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./:/workdir:ro
@@ -86,14 +81,9 @@ volumes:
   letsencrypt_certs:
     external: true
   certbot_acme_challenge:
+  node_modules:
   client_build:
-    driver: local
   mongodbdata:
-    driver: local
+    external: true
   appdata:
-    driver: local
-networks:
-  frontend:
-    driver: bridge
-  backend:
-    driver: bridge
+    external: true
