@@ -5,6 +5,8 @@ import time
 import os
 import uuid
 from flask_restful import reqparse
+# from filehash import FileHash
+# import traceback
 
 from utils.ddsutils import DDSUtils
 from repository.userrepo import UserRepo
@@ -27,6 +29,7 @@ class DDSService:
     def upload(self, api_request, data):
         upload_id = str(uuid.uuid4())
         log.info(f"{upload_id} | Initiating...")
+        hashing = DDSRepo()
         metadata = self.parse_metadata_file(api_request, upload_id)
         if not metadata:
             log.info(f"{upload_id} | Metadata file couldn't be parsed!")
@@ -40,11 +43,13 @@ class DDSService:
             if not isinstance(doc_path, list):
                 return doc_path
             data["agreement"] = json.loads(api_request.form.get('agreement'))
+            data["submitterInfo"] = json.loads(api_request.form.get('submitterInfo'))
             data["uploadId"], data["mediaFilePath"], data["submitterId"] = upload_id, doc_path[0], data["metadata"]["userId"]
             data["createdTimestamp"], data["metadataFilePath"] = eval(str(time.time()).replace('.', '')[0:13]), doc_path[2]
             data["lastUpdatedBy"], data["lastUpdatedTimestamp"] = data["metadata"]["userId"], eval(str(time.time()).replace('.', '')[0:13])
             data["uploadStatus"], data["active"] = "InProgress", True
             data["metadata_local"], data["media_local"] = doc_path[3], doc_path[1]
+            # data["file_hash"] = check
             log.info(f"{upload_id} | Saving metadata to mongo store....")
             dds_repo.insert_dds_metadata([data])
             return {"status": "Success", "message": "Your files are being uploaded, use 'uploadId' to track the status!", "uploadId": upload_id}
@@ -152,3 +157,10 @@ class DDSService:
             query["uploadId"] = {"$in": data["uploadIds"]}
         dds_repo.update_dds_metadata(query, {"active": False})
         return {"status": "Success", "message": "Uploads Deleted Successfully."}
+
+    # def hashofzip(self,filepath):
+    #     md5hasher = FileHash('md5')
+    #     hashed = md5hasher.hash_file(filepath)
+    #     return hashed
+
+        
