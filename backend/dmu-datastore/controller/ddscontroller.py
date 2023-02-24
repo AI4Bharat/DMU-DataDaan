@@ -119,7 +119,8 @@ def doc_upload():
             response = dds_service.upload(request, data)
             if "uploadId" in response.keys():
                 return jsonify(response), 200
-            return jsonify(response), 400
+            else:
+                return jsonify(response),200
         response = {"status": "Invalid Access", "message": "You're not authorised to access this resource"}
         return jsonify(response), 403
     except Exception as e:
