@@ -55,7 +55,12 @@ class DDSRepo:
         updated = col.update(find_query, {"$set": set_clause})
         return updated
 
-    # def hash_check(self, check):
-    #     col = self.get_dds_connection()
-    #     result = col.find_one({"zipHash":check})
-    #     return [result]
+    def hash_check(self,file_hash):
+        col = self.get_dds_connection()
+        result = col.find({"fileHash":file_hash})
+        if result.count() == 0 :
+            return 0
+        if result.count() == 1 :
+            return 1
+
+        

@@ -5,6 +5,8 @@ import time
 import os
 import uuid
 from flask_restful import reqparse
+import hashlib
+from flask import jsonify
 # from filehash import FileHash
 # import traceback
 
@@ -29,7 +31,11 @@ class DDSService:
     def upload(self, api_request, data):
         upload_id = str(uuid.uuid4())
         log.info(f"{upload_id} | Initiating...")
-        hashing = DDSRepo()
+        find_hash = DDSRepo()
+        file_hash = self.hash_file(api_request , upload_id)
+        hash_result = find_hash.hash_check(file_hash)
+        if hash_result == 1 :
+            return {"status":"Success","message":"This file already exists"}
         metadata = self.parse_metadata_file(api_request, upload_id)
         if not metadata:
             log.info(f"{upload_id} | Metadata file couldn't be parsed!")
@@ -49,7 +55,7 @@ class DDSService:
             data["lastUpdatedBy"], data["lastUpdatedTimestamp"] = data["metadata"]["userId"], eval(str(time.time()).replace('.', '')[0:13])
             data["uploadStatus"], data["active"] = "InProgress", True
             data["metadata_local"], data["media_local"] = doc_path[3], doc_path[1]
-            # data["file_hash"] = check
+            data["fileHash"] = file_hash
             log.info(f"{upload_id} | Saving metadata to mongo store....")
             dds_repo.insert_dds_metadata([data])
             return {"status": "Success", "message": "Your files are being uploaded, use 'uploadId' to track the status!", "uploadId": upload_id}
@@ -163,4 +169,11 @@ class DDSService:
     #     hashed = md5hasher.hash_file(filepath)
     #     return hashed
 
-        
+    def hash_file(self, api_request, upload_id):
+    
+        log.info(f"{upload_id} | Processing Zip File for hashvalue")
+        file = api_request.files['zipFile']
+        hash_value = hashlib.sha256(file.read()).hexdigest()
+        return hash_value
+    
+    
