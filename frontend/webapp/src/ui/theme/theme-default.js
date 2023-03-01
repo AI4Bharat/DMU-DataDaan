@@ -134,18 +134,8 @@ const themeDefault = createTheme({
     },
     MUIDataTableHeadCell: {
       root: {
-        "&:nth-child(1)": {
-          width: "18%",
-        },
-        "&:nth-child(2)": {
-          width: "18%",
-        },
-        "&:nth-child(3)": {
-          width: "18%",
-        },
-        "&:nth-child(4)": {
-          width: "18%",
-        },
+        width: "16%",
+        
       },
     },
     MuiPaper: {
