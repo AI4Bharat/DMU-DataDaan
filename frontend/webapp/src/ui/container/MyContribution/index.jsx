@@ -29,7 +29,19 @@ const MyContribution = (props) => {
     const resp = await res.json();
 
     if (res.ok) {
-      setTableData(resp);
+      const result = resp.map((item) => {
+        return [
+          item.createdTimestamp,
+          item.uploadId,
+          item.mediaFilePath,
+          item.metadataFilePath,
+          item.agreement.permission === "BHASHINI_IS_GRANTED_V1"
+            ? "For Use and Share"
+            : "Only Use",
+          item.uploadStatus,
+        ];
+      });
+      setTableData(result);
       setLoading(false);
     } else {
       setSnackbarInfo({
@@ -89,6 +101,14 @@ const MyContribution = (props) => {
           const temp = value.split("/");
           return <>{temp[temp.length - 1]}</>;
         },
+      },
+    },
+    {
+      name: "agreement",
+      label: "Permissions",
+      options: {
+        filter: false,
+        sort: true,
       },
     },
     {
