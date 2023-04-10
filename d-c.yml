@@ -6,7 +6,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     environment:
-      REACT_APP_APIGW_BASE_URL: "https://datadaan.centralindia.cloudapp.azure.com/api/"
+      REACT_APP_APIGW_BASE_URL: "https://datadaan-dibd.centralindia.cloudapp.azure.com/api/"
     volumes: 
       - node_modules:/app/node_modules
       - client_build:/app/build

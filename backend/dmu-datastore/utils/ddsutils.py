@@ -86,7 +86,7 @@ class DDSUtils:
         tc_list = []
         log.info(f"Reading T&C from - {t_and_c_file}")
         try:
-            with open(t_and_c_file, 'r') as f:
+            with open("/app/config/termsAndConditions.json", 'r') as f:
                 t_and_c_data = json.load(f)
             if t_and_c_data:
                 data = t_and_c_data["termsAndConditions"]

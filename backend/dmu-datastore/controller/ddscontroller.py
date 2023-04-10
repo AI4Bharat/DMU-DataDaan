@@ -1,6 +1,7 @@
 import logging
 import time
 
+import os
 from flask import Flask, jsonify, request
 from logging.config import dictConfig
 from config.ddsconfigs import context_path, x_key
@@ -23,9 +24,9 @@ def index():
         message='Welcome to the DMU Backend Server!'
     )
 
-
+# print("*"*500,context_path)
 # REST endpoint for login
-@dds_app.route(context_path + '/v1/login', methods=["POST"])
+@dds_app.route(os.path.join(context_path,'/v1/login'), methods=["POST"])
 def login():
     user_service, validator = UserService(), DDSValidator()
     data = request.get_json()
@@ -46,7 +47,7 @@ def login():
 
 
 # REST endpoint for logout
-@dds_app.route(context_path + '/v1/logout', methods=["GET"])
+@dds_app.route(os.path.join(context_path, '/v1/logout'), methods=["GET"])
 def logout():
     user_service = UserService()
     data = add_headers({}, request, "userId")
@@ -64,7 +65,7 @@ def logout():
 
 
 # REST endpoint for signup - protected access.
-@dds_app.route(context_path + '/v1/signup', methods=["POST"])
+@dds_app.route(os.path.join(context_path, '/v1/signup'), methods=["POST"])
 def signup():
     dds_service, user_service, validator = DDSService(), UserService(), DDSValidator()
     data = request.get_json()
@@ -81,7 +82,7 @@ def signup():
 
 
 # REST endpoint for delete users - protected access.
-@dds_app.route(context_path + '/v1/users/delete', methods=["POST"])
+@dds_app.route(os.path.join(context_path, '/v1/users/delete'), methods=["POST"])
 def delete_users():
     dds_service, user_service, validator = DDSService(), UserService(), DDSValidator()
     data = request.get_json()
@@ -103,7 +104,7 @@ def delete_users():
 
 
 # REST endpoint for file upload (zip file)
-@dds_app.route(context_path + '/v1/file/upload', methods=["POST"])
+@dds_app.route(os.path.join(context_path, '/v1/file/upload'), methods=["POST"])
 def doc_upload():
     dds_service, user_service, validator = DDSService(), UserService(), DDSValidator()
     # data = request.form.get('zipFile')
@@ -129,7 +130,7 @@ def doc_upload():
 
 
 # REST endpoint to search user uploads
-@dds_app.route(context_path + '/v1/upload/search', methods=["POST"])
+@dds_app.route(os.path.join(context_path, '/v1/upload/search'), methods=["POST"])
 def doc_search():
     dds_service, user_service = DDSService(), UserService()
     data = request.get_json(silent=True)
@@ -148,7 +149,7 @@ def doc_search():
 
 
 # REST endpoint to search user uploads
-@dds_app.route(context_path + '/v1/upload/delete', methods=["POST"])
+@dds_app.route(os.path.join(context_path, '/v1/upload/delete'), methods=["POST"])
 def doc_delete():
     dds_service, user_service, validator = DDSService(), UserService(), DDSValidator()
     data = request.get_json()
@@ -207,7 +208,7 @@ def terms_accept():
 
 
 # REST endpoint to search user uploads
-@dds_app.route(context_path + '/v1/terms/search', methods=["GET"])
+@dds_app.route(os.path.join(context_path, '/v1/terms/search'), methods=["GET"])
 def terms_search():
     utils = DDSUtils()
     try:
