@@ -251,6 +251,7 @@ def add_headers(data, api_request, user_id):
         "receivedAt": eval(str(time.time()).replace('.', '')[0:13]),
     }
     api_headers = dict(api_request.headers)
+    log.info(f"the headers are {api_headers}")
     if 'X-Key' in api_headers.keys():
         headers["xKey"] = api_headers['X-Key']
     if 'X-Token' in api_headers.keys():
