@@ -20,7 +20,7 @@ azure_account_name = os.environ.get('DMU_DUS_AZURE_ACCOUNT_NAME', "account")
 azure_link_prefix = f'https://{azure_account_name}.blob.core.windows.net/{azure_container_name}/'
 x_key = os.environ.get('DMU_DUS_X_KEY', "d6fd7481-f43e-4b76-b882-2ec512350d75")
 max_no_of_processes = os.environ.get('DMU_DUS_MAX_NO_OF_PROC', 10)
-t_and_c_file = os.environ.get('DMU_DUS_T_AND_C_FILE_PATH', "/Users/vishalmahuli/Desktop/dmu-dus/DMU-DataDaan/backend/dmu-datastore/config/termsAndConditions.json")
+t_and_c_file = os.environ.get('DMU_DUS_T_AND_C_FILE_PATH', "/app/config/termsAndConditions.json")
 if isinstance(max_no_of_processes, str):
     max_no_of_processes = eval(max_no_of_processes)
 max_media_file_size_in_mb = os.environ.get('DMU_DUS_MAX_MEDIA_FILE_SIZE_IN_MB', 5000)
