@@ -15,8 +15,8 @@ server {
     listen 443 ssl;
     server_name ${domain};
 
-    ssl_certificate /etc/nginx/sites/ssl/dummy/${domain}/fullchain.pem;
-    ssl_certificate_key /etc/nginx/sites/ssl/dummy/${domain}/privkey.pem;
+    ssl_certificate /etc/nginx/ssl/server.crt;
+    ssl_certificate_key /etc/nginx/ssl/server.key;
 
     include /etc/nginx/includes/options-ssl-nginx.conf;
 
