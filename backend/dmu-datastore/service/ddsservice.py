@@ -28,15 +28,15 @@ class DDSService:
     def __init__(self):
         pass
 
-    def upload(self, api_request, data):
+    def upload(self, api_request, data ,fileIds):
         upload_id = str(uuid.uuid4())
         log.info(f"{upload_id} | Initiating...")
         find_hash = DDSRepo()
-        file_hash = self.hash_file(api_request , upload_id)
+        file_hash = self.hash_file(api_request , upload_id , fileIds['zipFileId'])
         hash_result = find_hash.hash_check(file_hash)
         if hash_result == 1 :
             return {"status":"Success","message":"This file already exists"}
-        metadata = self.parse_metadata_file(api_request, upload_id)
+        metadata = self.parse_metadata_file(api_request, upload_id ,fileIds['metaFileId'])
         if not metadata:
             log.info(f"{upload_id} | Metadata file couldn't be parsed!")
             return {"status": "FAILED", "message": "Metadata file couldn't be parsed!"}
@@ -44,7 +44,7 @@ class DDSService:
             log.info(f"{upload_id} | Metadata file couldn't be parsed or is too Large!")
             return metadata
         data["fileMetadata"], meta_filepath = metadata[0], metadata[1]
-        doc_path = self.upload_doc_to_azure(api_request, metadata[1], upload_id)
+        doc_path = self.upload_doc_to_azure(api_request, metadata[1], upload_id , fileIds['zipFileId'])
         if doc_path:
             if not isinstance(doc_path, list):
                 return doc_path
@@ -63,7 +63,7 @@ class DDSService:
             log.info(f"{upload_id} | File upload failed.")
             return {"status": "FAILED", "message": "File Upload Failed!"}
 
-    def parse_metadata_file(self, api_request, upload_id):
+    def parse_metadata_file(self, api_request, upload_id, metaFileId):
         log.info(f"{upload_id} | Parsing metadata file...")
         try:
             file = api_request.files['metadata']
@@ -78,7 +78,8 @@ class DDSService:
                 return {"status": "FAILED", "message": "Unsupported Metadata File Type!"}
             local_filename = f'{upload_id}___metadata___{filename}'
             filepath = os.path.join(local_storage_path, local_filename)
-            file.save(filepath)
+            # file.save(filepath)
+            os.rename(f"{local_storage_path}/{metaFileId}.txt",filepath) #renamed file saved after validation
             file_size = os.stat(filepath).st_size
             file_size_in_mb = file_size / (1024 * 1024)
             if file_size_in_mb > max_metadata_file_size_in_mb:
@@ -99,7 +100,7 @@ class DDSService:
             log.exception(f"Exception while parsing metadata: {e}", e)
             return None
 
-    def upload_doc_to_azure(self, api_request, metadata_filepath, upload_id):
+    def upload_doc_to_azure(self, api_request, metadata_filepath, upload_id,zipFileId):
         try:
             log.info(f"{upload_id} | Processing Zip File......")
             file = api_request.files['zipFile']
@@ -116,7 +117,8 @@ class DDSService:
                 log.info(f"{upload_id} | Unsupported Media File Type!!")
                 return {"status": "FAILED", "message": "Unsupported Media File Type!"}
             log.info(f"{upload_id} | Saving to local store...")
-            file.save(filepath)
+            os.rename(f"{local_storage_path}/{zipFileId}.zip",filepath) #renamed file saved after validation
+            # file.save(filepath)
             file_size = os.stat(filepath).st_size
             file_size_in_mb = file_size / (1024 * 1024)
             if file_size_in_mb > max_media_file_size_in_mb:
@@ -169,11 +171,12 @@ class DDSService:
     #     hashed = md5hasher.hash_file(filepath)
     #     return hashed
 
-    def hash_file(self, api_request, upload_id):
+    def hash_file(self, api_request, upload_id , zipFileId):
     
         log.info(f"{upload_id} | Processing Zip File for hashvalue")
-        file = api_request.files['zipFile']
-        hash_value = hashlib.sha256(file.read()).hexdigest()
+        # file = api_request.files['zipFile']
+        with open(f"{local_storage_path}/{zipFileId}.zip","rb") as data :  #read file stored after validation
+            hash_value = hashlib.sha256(data.read()).hexdigest()
         return hash_value
     
     
