@@ -1,9 +1,9 @@
 import logging
 import time
-
+import uuid
 from flask import Flask, jsonify, request
 from logging.config import dictConfig
-from config.ddsconfigs import context_path, x_key
+from config.ddsconfigs import context_path, x_key ,local_storage_path
 from service.userservice import UserService
 from service.ddsservice import DDSService
 from utils.ddsvalidator import DDSValidator
@@ -106,17 +106,18 @@ def delete_users():
 @dds_app.route(context_path + '/v1/file/upload', methods=["POST"])
 def doc_upload():
     dds_service, user_service, validator = DDSService(), UserService(), DDSValidator()
-    # data = request.form.get('zipFile')
-    data = request.get_json()
+    data = request.form.to_dict(flat=False) #to get agreement and submitterInfo from request body
+   
+    # data = request.get_json()
     data = add_headers(data, request, "userId")
     try:
         user_id = user_service.is_session_active(data["metadata"]["token"])
         if user_id:
             data = add_headers(data, request, user_id)
             validation_res = validator.validate_upload_req(request, data)
-            if validation_res:
+            if "status" in validation_res.keys(): #status key in  indicate validation error
                 return jsonify(validation_res), 400
-            response = dds_service.upload(request, data)
+            response = dds_service.upload(request, data , validation_res)
             if "uploadId" in response.keys():
                 return jsonify(response), 200
             else:
@@ -251,6 +252,7 @@ def add_headers(data, api_request, user_id):
         "receivedAt": eval(str(time.time()).replace('.', '')[0:13]),
     }
     api_headers = dict(api_request.headers)
+    log.info(f"the headers are {api_headers}")
     if 'X-Key' in api_headers.keys():
         headers["xKey"] = api_headers['X-Key']
     if 'X-Token' in api_headers.keys():

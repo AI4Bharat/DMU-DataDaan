@@ -1,10 +1,10 @@
 import json
 import logging
-
+import uuid 
 from repository.ddsrepo import DDSRepo
 from service.ddsservice import DDSService
 from .ddsutils import DDSUtils
-from config.ddsconfigs import x_key
+from config.ddsconfigs import x_key , local_storage_path
 
 log = logging.getLogger('file')
 dds_repo, dds_service, utils = DDSRepo(), DDSService(), DDSUtils()
@@ -46,10 +46,14 @@ class DDSValidator:
                 return {"status": "VALIDATION_FAILED", "message": "zipFile is mandatory!"}
             if 'metadata' not in files.keys():
                 return {"status": "VALIDATION_FAILED", "message": "metadata is mandatory!"}
+            zipFileId = str(uuid.uuid4()) # Flask supports only one time file access 
+            metadataId = str(uuid.uuid4()) # So saving it locally with uuid as a reference
+            files['zipFile'].save(local_storage_path + f"/{zipFileId}.zip") 
+            files['metadata'].save(local_storage_path + f"/{metadataId}.txt")
             response = self.validate_terms_and_cond(agreement)
             if response:
                 return response
-            return None
+            return {"zipFileId":zipFileId , "metaFileId":metadataId}
         except Exception as e:
             log.exception(f"Exception in upload validation: {e}", e)
             return {"status": "VALIDATION_FAILED", "message": "metadata, zipFile, agreement are mandatory"}
