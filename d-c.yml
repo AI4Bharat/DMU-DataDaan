@@ -41,7 +41,9 @@ services:
       - mongodb
 
   nginx:
-    build: ./nginx
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
     image: evgeniy-khyst/nginx
     env_file:
       - ./config.env
@@ -57,7 +59,9 @@ services:
     restart: unless-stopped
 
   certbot:
-    build: ./certbot
+    build:
+      context: ./certbot
+      dockerfile: Dockerfile
     image: evgeniy-khyst/certbot
     env_file:
       - ./config.env
@@ -66,7 +70,9 @@ services:
       - certbot_acme_challenge:/var/www/certbot
 
   cron:
-    build: ./cron
+    build:
+      context: ./cron
+      dockerfile: Dockerfile
     image: evgeniy-khyst/cron
     environment:
       COMPOSE_PROJECT_NAME: "${COMPOSE_PROJECT_NAME}"
